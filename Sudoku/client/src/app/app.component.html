@@ -1,0 +1,132 @@
+<!--The content below is only a placeholder and can be replaced.-->
+
+
+<!-- Si identity es true muestra los divs -->
+
+
+<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark" *ngIf="identity">
+  <a class="navbar-brand" href="#">Sudoku</a>
+  <button class="navbar-toggler d-lg-none" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse left" id="navbarsExampleDefault">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item active">
+          <a class="nav-link" href="#">Bienvenido {{identity.name}} <span class="sr-only">(current)</span></a>
+        </li>
+      </ul>
+      </div>
+</nav>
+
+<div class="container-fluid" *ngIf="identity">
+  <div class="row">
+    <nav class="col-sm-3 col-md-2 d-none d-sm-block bg-light sidebar">
+      <ul class="nav nav-pills flex-column">
+        <li class="nav-item">
+          <a [routerLink]="['/sudoku']" class="nav-link" href="#">
+                <i class="fa fa-gamepad" aria-hidden="true"></i> Jugar Sudoku <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item">
+          <a [routerLink]="['/mis-datos']" class="nav-link" href="#">
+              <i class="fa fa-user" aria-hidden="true"></i> Usuario</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" (click)="logout()" href="#">
+              <i class="fa fa-power-off" aria-hidden="true"></i> Salir</a>
+        </li>
+      </ul>
+    </nav>
+
+    <main class="col-sm-9 ml-sm-auto col-md-10 pt-3" role="main" *ngIf="identity">
+            <div [class.hidden]="!identity">
+                <router-outlet></router-outlet>
+            </div>
+    </main>
+  </div>
+</div>
+
+
+<!--
+<div class="row">
+<div class="navigation col-sm-2" *ngIf="identity"> 
+  <h1 class='head-title'>
+    <a [routerLink]="['/']">
+      <i class="fa fa-music" aria-hidden="true"></i> 
+    {{title}}
+    </a>
+  </h1>
+
+  <nav id="navigation">
+    <a href="#">
+        <i class="fa fa-search" aria-hidden="true"></i>        
+      Sudoku</a>
+    <a href="#">
+        <i class="fa fa-user" aria-hidden="true"></i>        
+      Usuario</a>
+  </nav>
+  <hr>
+
+  <nav id="user_logged">
+  <span id="identity_name"> {{identity.name}}</span>
+    <a [routerLink]="['/mis-datos']" href="#">
+      <i class="fa fa-asterisk" aria-hidden="true"></i> Mis datos</a>
+      <a (click)="logout()" href="#">
+          <i class="fa fa-power-off" aria-hidden="true"></i>Salir</a>
+  </nav>
+</div>
+
+<div *ngIf="identity" class="central col-sm-10">
+    <router-outlet></router-outlet>
+  </div>
+
+</div>-->
+<div class="container">
+<div class="row">
+  <!-- Inicio -->
+  <div class="col-sm-6" *ngIf="!identity">
+      <h1>Iniciar Sesion</h1>
+      <div *ngIf="errorMessage" class="alert alert-warning">
+        <strong>Error</strong> {{errorMessage}}
+      </div>
+
+      <form #loginForm="ngForm" (ngSubmit)="onSubmit()" class="col-md-10">
+      <p>
+        <label>Usuario: </label>
+        <input type="username" #username="ngModel" name="username" [(ngModel)]="user.username"
+        class="form-control" required />
+        <span *ngIf="!username.valid && username.touched">El usuario es obligatorio</span>
+      </p>
+        <p><label>Contraseña: </label>
+          <input type="password" #password="ngModel" name="password" [(ngModel)]="user.password"
+          class="form-control" required/></p>
+          <input type="submit" value="Entrar" class="btn btn-primary">
+        </form>
+    </div>
+    <div class="col-lg-6" *ngIf="!identity">
+        <h1>Registrate</h1>
+        <div *ngIf="alertRegister" class="alert alert-warning">
+            <strong>Error</strong> {{alertRegister}}
+          </div>
+        <form #registerForm = "ngForm" (ngSubmit)="onSubmitRegister()" class="col-md-10">
+        <p><label>Nombre: </label>
+          <input type="text" #name = "ngModel" name = "name" [(ngModel)]="user_register.name" 
+          class="form-control" required/>
+          <span *ngIf="!name.valid && name.touched">El nombre es obligatorio</span>
+        </p>
+        <p>
+            <label>Usuario: </label>
+            <input type="username" #username="ngModel" name="username" [(ngModel)]="user_register.username"
+            class="form-control" required />
+            <span *ngIf="!username.valid && username.touched">El usuario es obligatorio</span>
+          </p>
+            <p><label>Contraseña: </label>
+              <input type="password" #password="ngModel" name="password" [(ngModel)]="user_register.password"
+              class="form-control" required/>
+              <span *ngIf="!password.valid && password.touched">La contrasena es obligatorio</span>
+            </p>
+            <input type="submit" value="Registrarse" class="btn btn-primary">
+            </form>
+      </div>
+  </div>
+</div>
+

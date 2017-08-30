@@ -1,0 +1,25 @@
+
+    <h1>{{titulo}}</h1>
+
+    <div *ngIf="alertUpdate">
+        <div class="alert alert-info">
+            {{alertUpdate}}
+        </div>
+    </div>
+
+    <form #userUpdateForm = "ngForm" (ngSubmit)="onSubmit()" class="col-md-10">
+    <p><label>Nombre: </label>
+      <input type="text" #name = "ngModel" name = "name" [(ngModel)]="user.name" 
+      class="form-control" required/>
+      <span *ngIf="!name.valid && name.touched">El nombre es obligatorio</span>
+    </p>
+    <p>
+        <label>Usuario: </label>
+        <input type="username" #username="ngModel" name="username" [(ngModel)]="user.username"
+        class="form-control" required />
+        <span *ngIf="!username.valid && username.touched">El usuario es obligatorio</span>
+      </p>
+        <input type="submit" value="Actualizar" class="btn btn-primary">
+        </form>
+
+
