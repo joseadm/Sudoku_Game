@@ -35,7 +35,8 @@ export class UserEditComponent implements OnInit {
 
     onSubmit() {
         console.log(this.user);
-        this._userService.updateUser(this.user).subscribe(
+        this._userService.updateUser(this.user)
+            .subscribe(
             response => {
                 if(!this.identity._id) {
                     this.alertUpdate = 'El usuario no se ha actualizado';

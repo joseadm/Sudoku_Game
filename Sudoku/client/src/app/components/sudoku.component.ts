@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
-import * as p5 from 'p5';
 import { UserService } from '../services/user.service';
 import { GLOBAL } from '../services/global';
 
@@ -16,6 +15,8 @@ export class SudokuComponent implements OnInit {
     public token;
     public url: string;
     public init;
+
+    public grid
 
     constructor(
         private _route: ActivatedRoute,

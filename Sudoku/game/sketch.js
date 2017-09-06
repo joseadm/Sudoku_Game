@@ -15,17 +15,13 @@ function newGrid() {
     draw();
 }
 
-// Resuelve Sudoku
-function solve() {
-    sudoku.solveGrid();
-}
-
 // Controla la configuracion del grid
 function setup() {
-  createCanvas(451, 451);
+  var csv = createCanvas(451, 451);
   background(240);
   sudoku = new Sudoku(50);
   sudoku.generateGrid(nbHoles);
+  csv.position(400, 145);
 }
 
 // Dibuja el grid

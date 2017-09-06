@@ -1,22 +1,15 @@
-
 // Variables iniciales
 var sudoku;
 var nbHoles = 60;
 
-
-// Crea un nuevo grid
-function newGrid() {
-    setup();
-    draw();
-}
-
 // Controla la configuracion del grid
 function setup() {
-  var csv = createCanvas(451, 451);
+  var canvas = createCanvas(451, 451);
   background(240);
   sudoku = new Sudoku(50);
   sudoku.generateGrid(nbHoles);
-  csv.position(400, 145);
+  canvas.position(200, 90);
+  canvas.parent('sudokuGrid');
 }
 
 // Dibuja el grid
@@ -24,6 +17,12 @@ function draw() {
   frameRate(15);
   sudoku.drawGrid();
   sudoku.checkGrid();
+}
+
+// Crea un nuevo grid
+function newGrid() {
+  setup();
+  draw();
 }
 
 // Maneja los clicks
