@@ -9,6 +9,7 @@
 body {
     padding-top: 3.5rem;
   }
+
   
   /*
    * Typography
@@ -24,6 +25,9 @@ body {
     align-content: left;
   }
 
+  .sudokuGrid {
+    align-content: center;
+  }
   
   /*
    * Sidebar
