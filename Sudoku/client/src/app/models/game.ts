@@ -41,4 +41,28 @@ export class Game {
         }
     
       }
+      moveSelection(direction) {
+        if (this.selectedCell) {
+          var row = this.selectedCell.row;
+          var col = this.selectedCell.col;
+          switch (direction) {
+            case 0:
+              // Si la direccion es UP_ARROW
+              this.setSelectedCell(this.grid.getCell(Math.max(0, row - 1), col));
+              break;
+            case 1:
+              // Si la direccion es RIGHT_ARROW
+              this.setSelectedCell(this.grid.getCell(row, Math.min(8, col + 1)));
+              break;
+            case 2:
+              // Si la direccion es LEFT_ARROW
+              this.setSelectedCell(this.grid.getCell(Math.min(8, row + 1), col));
+              break;
+            case 3:
+              // Si la direccion es BACK_ARROW
+              this.setSelectedCell(this.grid.getCell(row, Math.max(0, col - 1)));
+              break;
+          }
+        }
+      }
 }

@@ -8,6 +8,7 @@ var app = express();
 // Cargar las rutas
 
 var user_routes = require('./routes/user');
+var sudoku_routes = require('./routes/sudoku');
 
 app.use(bodyParser.urlencoded({extended:false}));
 app.use(bodyParser.json());
@@ -24,6 +25,7 @@ app.use((req, res, next) => {
 
 // Carga de rutas base 
 app.use('/api', user_routes);
+app.use('/api', sudoku_routes);
 
 
 module.exports = app;

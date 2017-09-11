@@ -102,7 +102,7 @@ export class SudokuComponent implements OnInit {
                     var y = p.mouseY;
                     // Con X y Y modifican la celda para que se encuentre seleccionada
                     var cell = this.game.getCellAt(x, y);
-                    if (cell !== undefined && !cell.fixed) {
+                    if (cell !== undefined) {
                       if (cell === this.game.selectedCell) {
                         this.game.setCellValue(cell, ((this.game.selectedCell.number + 1) % 10));
                       } else {
@@ -114,7 +114,15 @@ export class SudokuComponent implements OnInit {
 
                   p.keyPressed = () =>{
                       // Controla si ingresa o elimina un valor
-                    if (p.keyCode === 96 || p.keyCode === 48 || p.keyCode === p.BACKSPACE || p.keyCode === p.DELETE) {
+                      if (p.keyCode === p.UP_ARROW) {
+                        this.game.moveSelection(0)
+                      } else if (p.keyCode === p.RIGHT_ARROW) {
+                        this.game.moveSelection(1);
+                      } else if (p.keyCode === p.DOWN_ARROW) {
+                        this.game.moveSelection(2);
+                      } else if (p.keyCode === p.LEFT_ARROW) {
+                        this.game.moveSelection(3);
+                      } else if (p.keyCode === 96 || p.keyCode === 48 || p.keyCode === p.BACKSPACE || p.keyCode === p.DELETE) {
                         this.game.setCellValue(this.game.selectedCell, 0);
                       } else if (p.keyCode >= 49 && p.keyCode <= 57) {
                         this.game.setCellValue(this.game.selectedCell, p.keyCode - 48);
