@@ -1,17 +1,21 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
+
 import { UserService } from '../services/user.service';
+import { SudokuService } from '../services/sudoku.service';
+
 import { GLOBAL } from '../services/global';
 import { User } from '../models/user';
 import { Cell } from '../models/cell';
 import { Grid } from '../models/grid';
 import { Game } from '../models/game';
+
 import * as p5 from 'p5';
 
 @Component({
     selector: 'sudoku',
     templateUrl: '../views/sudoku.html',
-    providers: [UserService]
+    providers: [UserService, SudokuService]
 })
 
 export class SudokuComponent implements OnInit {
@@ -21,22 +25,26 @@ export class SudokuComponent implements OnInit {
     public game: Game;
     public user: User;
     public grid: Grid;
+    public gridMongo: Grid;
 
     constructor(
         private _route: ActivatedRoute,
         private _router: Router,
-        private _userService: UserService
+        private _userService: UserService,
+        private _sudokuService: SudokuService
     ){
         this.identity = this._userService.getIdentity();
         this.token = this._userService.getToken();
         this.user = this.identity;
         this.grid = new Grid();
+        this.gridMongo = new Grid();
         this.game = new Game(this.user, this.grid);
         this.titulo = 'Jugar Sudoku'
     }
 
     ngOnInit() {
         console.log('sudoku.compose.ts cargando...');
+        this.getGrid(); // Trae de mongo el grid
         this.game.toString();
         const s = (p) => {
                   let canvas;
@@ -134,4 +142,35 @@ export class SudokuComponent implements OnInit {
 
                 let player = new p5(s);
     }
+
+    getGrid() {
+      this._route.params.forEach((params: Params) => {
+        let id = "59b976e815cd525e06ea9f92";
+
+        this._sudokuService.getGrid(this.token, id).subscribe(
+          response => {
+            if(!response.grid) {
+                this._router.navigate(['/']);
+            } else {
+              console.log(response.grid);
+              this.gridMongo = response.grid;
+              for (var row = 0; row < 9; row++) {
+                for (var col = 0; col < 9; col++) {
+                  this.grid.setCell(this.gridMongo.data[row][col].value,row,col);
+                }
+              }
+              this.grid.toString();
+              this.grid.createSpaces(80);
+            }
+          }, error => {
+            var errorMessage = <any>error;
+            if(errorMessage != null) {
+              var body = JSON.parse(error._body);
+              console.log(error);
+            }
+          }
+        );
+      });
+    }
+
 }

@@ -17,19 +17,23 @@ export class Grid {
                 this.data[i][j] = new Cell(0,i,j);
             }
         }
-        this.createGrid();
         this.checker();
     }
-    createGrid() {
-        this.data[0][3].setValue(1);
-        this.data[0][3].fixed = true;
-        this.data[0][6].setValue(7);
-        this.data[0][6].fixed = true;
-        this.data[0][7].setValue(4);
-        this.data[0][7].fixed = true;
+    createSpaces(number: number) {
+      for(var i=0; i<number; i++) {
+        var row = Math.floor(Math.random()*8);
+        var col = Math.floor(Math.random()*8);
+        this.data[row][col].setValue(0);
+      }
+      for (var row = 0; row < 9; row++) {
+        for (var col = 0; col < 9; col++) {
+          this.getCell(row, col).fixed = this.getCell(row, col).value != 0;
+          this.getCell(row, col).visible = this.getCell(row, col).value != 0;
+        }
+      }
     }
     setCell(value, row, col) {
-        this.data[row][col] = value;
+        this.data[row][col].value = value;
     }
     getCell(row: any, col: any) {
         return this.data[row][col];
