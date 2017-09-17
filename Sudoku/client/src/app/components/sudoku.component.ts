@@ -23,9 +23,12 @@ export class SudokuComponent implements OnInit {
     public token;
     public titulo: string;
     public game: Game;
+    public game_inserted: Game;
     public user: User;
     public grid: Grid;
     public gridMongo: Grid;
+    public gameMongo: Game;
+    public alertRegister;
 
     constructor(
         private _route: ActivatedRoute,
@@ -39,13 +42,15 @@ export class SudokuComponent implements OnInit {
         this.grid = new Grid();
         this.gridMongo = new Grid();
         this.game = new Game(this.user, this.grid);
+        this.game_inserted = new Game(this.user, this.grid);
+        this.gameMongo = new Game(new User('','','',''), new Grid());
         this.titulo = 'Jugar Sudoku'
     }
 
     ngOnInit() {
         console.log('sudoku.compose.ts cargando...');
         this.getGrid(); // Trae de mongo el grid
-        this.game.toString();
+        console.log(this.user);
         const s = (p) => {
                   let canvas;
             
@@ -145,8 +150,8 @@ export class SudokuComponent implements OnInit {
 
     getGrid() {
       this._route.params.forEach((params: Params) => {
-        let id = "59b976e815cd525e06ea9f92";
-
+        let id = "59bb188b831ba28a64fd9d4d";
+        
         this._sudokuService.getGrid(this.token, id).subscribe(
           response => {
             if(!response.grid) {
@@ -160,7 +165,61 @@ export class SudokuComponent implements OnInit {
                 }
               }
               this.grid.toString();
-              this.grid.createSpaces(80);
+              this.grid.createSpaces();
+            }
+          }, error => {
+            var errorMessage = <any>error;
+            if(errorMessage != null) {
+              var body = JSON.parse(error._body);
+              console.log(error);
+            }
+          }
+        );
+      });
+    }
+
+    insertGame() {
+      this._sudokuService.insertGame(this.game_inserted).subscribe(
+        response => {
+          let game = response.game;
+          this.game_inserted = game;
+          if(!game) {
+            this.alertRegister = 'Error al registrarse';
+          } else {
+            this.alertRegister = 'Registro se ha realizado correctamente';
+            this.game_inserted = new Game(this.user,this.grid);
+          }
+        },
+        error => {
+          var alertRegister = <any>error;
+          if(alertRegister != null) {
+            var body = JSON.parse(error._body);
+            this.alertRegister = body.message;
+            console.log(error);
+          }
+        }
+      );
+    }
+
+    getGame() {
+      // 59befdd23d513cc0d5b6f544
+      this._route.params.forEach((params: Params) => {
+        let id = "59befdd23d513cc0d5b6f544";
+
+        this._sudokuService.getGame(this.token, id).subscribe(
+          response => {
+            if(!response.game) {
+                this._router.navigate(['/']);
+            } else {
+              console.log(response.game);
+              this.gridMongo = response.game.grid;
+              for (var row = 0; row < 9; row++) {
+                for (var col = 0; col < 9; col++) {
+                  if(this.grid.getCell(row,col).value == 0)
+                    this.grid.setCell(this.gridMongo.data[row][col].value,row,col);
+                }
+              }
+              this.grid.showSpaces();
             }
           }, error => {
             var errorMessage = <any>error;

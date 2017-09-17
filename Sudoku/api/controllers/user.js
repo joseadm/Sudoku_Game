@@ -16,8 +16,6 @@ function save_user(req, res) {
     var user = new User();
 
     var params = req.body;
-    
-    console.log(params);
 
     user.name = params.name;
     user.username = params.username;
@@ -84,7 +82,7 @@ function updateUser(req, res){
     var update = req.body;
 
     if(userId != req.user.sub) {
-        return res.status(500).send({message: 'Notienes permiso'});
+        return res.status(500).send({message: 'No tienes permiso'});
     }
 
     User.findByIdAndUpdate(userId, update, (err, userUpdated) => {
@@ -100,9 +98,26 @@ function updateUser(req, res){
     });
 }
 
+function findUser(req, res) {
+    var userId = req.params.id;
+
+    User.findById(userId, (err, user) => {
+        if(err) {
+            res.status(500).send({message: 'Error al econtrar'});
+        } else {
+            if(!user) {
+                res.status(404).send({message: 'No se ha podido encontrar'});
+            } else {
+                res.status(200).send({user});
+            }
+        }
+    });
+}
+
 module.exports = {
     pruebas,
     save_user,
     login_user,
     updateUser,
+    findUser
 };

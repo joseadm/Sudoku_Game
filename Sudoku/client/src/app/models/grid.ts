@@ -19,12 +19,7 @@ export class Grid {
         }
         this.checker();
     }
-    createSpaces(number: number) {
-      for(var i=0; i<number; i++) {
-        var row = Math.floor(Math.random()*8);
-        var col = Math.floor(Math.random()*8);
-        this.data[row][col].setValue(0);
-      }
+    createSpaces() {
       for (var row = 0; row < 9; row++) {
         for (var col = 0; col < 9; col++) {
           this.getCell(row, col).fixed = this.getCell(row, col).value != 0;
@@ -32,6 +27,15 @@ export class Grid {
         }
       }
     }
+
+    showSpaces() {
+      for (var row = 0; row < 9; row++) {
+        for (var col = 0; col < 9; col++) {
+          this.getCell(row, col).visible = this.getCell(row, col).value != 0;
+        }
+      }
+    }
+
     setCell(value, row, col) {
         this.data[row][col].value = value;
     }
