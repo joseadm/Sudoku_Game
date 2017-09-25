@@ -4,7 +4,7 @@ en la cual se utilizo en este caso [MongoDB](http://www.mongodb.org/) como base 
 ademas [Node.js](http://www.nodejs.org/) con su complemento y framework mas usado para 
 servidores [Express](http://expressjs.com/), estas fueron utilizadas para el desarrollo del
 API Rest y como framework de desarrollo para el cliente se utilizo [AngularJS](http://angularjs.org/)
-esto para realizar una SPA (Single Web Application) que permitira el manejo del juego Sudoku
+esto para realizar una SPA (Single Page Application) que permitira el manejo del juego Sudoku
 
 ## Herramientas
 Las herramientas que se utilizaron para el desarrollo de esta aplicacion son:
