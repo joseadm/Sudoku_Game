@@ -17,9 +17,9 @@ Las herramientas que se utilizaron para el desarrollo de esta aplicacion son:
 
 ## Requisitos
 Asegurarse de instalar las siguientes herramientas:
-* Git - [Download & Install Git](https://git-scm.com/downloads) Se utiliza para la gestion del repositorio
-* Node.js - [Download & Install Node.js](https://nodejs.org/en/download/) Instalar el paquete de npm
-* MongoDB - [Download & Install MongoDB](http://www.mongodb.org/downloads) Mantener en el puerto (27017)
+* Git - [Descarga e Instala Git](https://git-scm.com/downloads) Se utiliza para la gestion del repositorio
+* Node.js - [Descarga e Instala Node.js](https://nodejs.org/en/download/) Instalar el paquete de npm
+* MongoDB - [Descarga e Instala MongoDB](http://www.mongodb.org/downloads) Mantener en el puerto (27017)
 
 ### Clonar el repositorio de Github
 La forma recomendada es con la directiva clonar de git:
@@ -42,6 +42,6 @@ $ npm start
 $ ng serve
 ```
 
-## Ingresar a http://localhost:4200/ 
+3) Ingresar a http://localhost:4200/ 
 
 
