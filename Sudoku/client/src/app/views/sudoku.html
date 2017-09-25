@@ -2,20 +2,38 @@
     <h3>{{titulo}}</h3>
     <div class="container">
             <div class="row">
-                        <div *ngIf="alertRegister" class="alert alert-warning">
-                                        <strong>Error</strong> {{alertRegister}}
+                        <div *ngIf="alertRegister" class="alert alert-info">
+                                         {{alertRegister}}
                                       </div>
                 <div class="col-12" align="center">
-                        <div class="btn-group" role="group">
-                                <button id="btnGroupDrop1" type="button" class="btn btn-outline-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                  Nuevo
-                                </button>
-                                <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-                                  <a class="dropdown-item" href="#">Facil</a>
-                                  <a class="dropdown-item" href="#">Medio</a>
-                                  <a class="dropdown-item" href="#">Dificil</a>
-                                </div>
-                              </div>
+                    <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#myModal">
+                        Nuevo
+                      </button>
+                      
+                      <!-- Modal -->
+                      <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h5 class="modal-title" id="exampleModalLabel">Elige la dificultad</h5>
+                              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                              </button>
+                            </div>
+                            <div class="modal-body">
+                                  <div class="row">
+                                    <div class="col-4"><p>Esta dificultad permite aprender a los jugadores sin nada de experiencia</p><a href="#" class="btn btn-success">Facil</a></div>
+                                    <div class="col-4"><p>Permite a los jugadores con habilidad aprender a analizar</p><a href="#" class="btn btn-warning">Medio</a></div>
+                                    <div class="col-4"><p>Una modalidad mas dificil para los jugadores mas expertos y habilidosos</p><a href="#" class="btn btn-danger">Dificil</a></div>                                    
+                                  </div>
+                                  </div>
+                                  <div class="modal-footer">
+                                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    </div>
+                            </div>
+                          </div>
+                        </div>
+
                         <button type="button" class="btn btn-outline-success" (click) = "insertGame()">Guardar</button>
                         <button type="button" class="btn btn-outline-warning" (click) = "getGame()">Cargar</button>     
                         <button type="button" class="btn btn-outline-danger">Resolver</button>

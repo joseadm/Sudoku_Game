@@ -204,7 +204,7 @@ export class SudokuComponent implements OnInit {
     getGame() {
       // 59befdd23d513cc0d5b6f544
       this._route.params.forEach((params: Params) => {
-        let id = "59befdd23d513cc0d5b6f544";
+        let id = this.user.name;
 
         this._sudokuService.getGame(this.token, id).subscribe(
           response => {
@@ -231,5 +231,41 @@ export class SudokuComponent implements OnInit {
         );
       });
     }
+
+    getGameDifficulty(difficulty: string) {
+
+      this._route.params.forEach((params: Params) => {
+        let id = '59bb188b831ba28a64fd9d4d'
+        switch(difficulty) {
+          case 'easy': id = '59bb188b831ba28a64fd9d4d'; break;
+          case 'medium': id = '59bf0729a0be6dc70f0f8dfa'; break;
+          case 'hard': id = '59bf0752f8ebcdc737d021bb'; break; 
+        }
+
+        this._sudokuService.getGrid(this.token, id).subscribe(
+          response => {
+            if(!response.grid) {
+                this._router.navigate(['/']);
+            } else {
+              console.log(response.grid);
+              this.gridMongo = response.grid;
+              for (var row = 0; row < 9; row++) {
+                for (var col = 0; col < 9; col++) {
+                    this.grid.setCell(this.gridMongo.data[row][col].value,row,col);
+                }
+              }
+              this.grid.createSpaces();
+            }
+          }, error => {
+            var errorMessage = <any>error;
+            if(errorMessage != null) {
+              var body = JSON.parse(error._body);
+              console.log(error);
+            }
+          }
+        );
+      });
+    }
+
 
 }
