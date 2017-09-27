@@ -9,10 +9,6 @@ export class Game {
         this.user = user;
         this.grid = grid;
     }
-    toString() {
-        console.log(this.user.name+"\n");
-        console.log(this.grid.toString());
-    }
     checkGrid() {
         return this.grid.check();
     }
@@ -20,7 +16,6 @@ export class Game {
         if (!cell.fixed && value >= 0 && value <= 10) {
           cell.setValue(value);
           this.setSelectedCell(cell);
-          this.grid.toString();
         }
       }
     setSelectedCell(cell) {

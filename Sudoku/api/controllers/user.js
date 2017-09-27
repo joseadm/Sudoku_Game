@@ -6,12 +6,6 @@ var bcrypt = require('bcrypt-nodejs'); // Encriptar nuestra contraseña
 var User = require('../models/user');
 var jwt = require('../services/jwt');
 
-function pruebas(req, res) {
-    res.status(200).send({
-        message: 'Probando una accion del controlador de usuarios del API Rest'
-    });
-}
-
 function save_user(req, res) {
     var user = new User();
 
@@ -115,7 +109,6 @@ function findUser(req, res) {
 }
 
 module.exports = {
-    pruebas,
     save_user,
     login_user,
     updateUser,

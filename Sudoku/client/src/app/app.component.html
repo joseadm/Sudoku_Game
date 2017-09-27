@@ -45,45 +45,10 @@
   </div>
 </div>
 
-
-<!--
-<div class="row">
-<div class="navigation col-sm-2" *ngIf="identity"> 
-  <h1 class='head-title'>
-    <a [routerLink]="['/']">
-      <i class="fa fa-music" aria-hidden="true"></i> 
-    {{title}}
-    </a>
-  </h1>
-
-  <nav id="navigation">
-    <a href="#">
-        <i class="fa fa-search" aria-hidden="true"></i>        
-      Sudoku</a>
-    <a href="#">
-        <i class="fa fa-user" aria-hidden="true"></i>        
-      Usuario</a>
-  </nav>
-  <hr>
-
-  <nav id="user_logged">
-  <span id="identity_name"> {{identity.name}}</span>
-    <a [routerLink]="['/mis-datos']" href="#">
-      <i class="fa fa-asterisk" aria-hidden="true"></i> Mis datos</a>
-      <a (click)="logout()" href="#">
-          <i class="fa fa-power-off" aria-hidden="true"></i>Salir</a>
-  </nav>
-</div>
-
-<div *ngIf="identity" class="central col-sm-10">
-    <router-outlet></router-outlet>
-  </div>
-
-</div>-->
 <div class="container">
 <div class="row">
   <!-- Inicio -->
-  <div class="col-sm-6" *ngIf="!identity">
+  <div class="col-sm-6 inicio_sesion" *ngIf="!identity">
       <h1>Iniciar Sesion</h1>
       <div *ngIf="errorMessage" class="alert alert-warning">
         <strong>Error</strong> {{errorMessage}}
@@ -102,7 +67,7 @@
           <input type="submit" value="Entrar" class="btn btn-primary">
         </form>
     </div>
-    <div class="col-lg-6" *ngIf="!identity">
+    <div class="col-lg-6 registrar" *ngIf="!identity">
         <h1>Registrate</h1>
         <div *ngIf="alertRegister" class="alert alert-warning">
             <strong>Error</strong> {{alertRegister}}
@@ -125,7 +90,7 @@
               <span *ngIf="!password.valid && password.touched">La contrasena es obligatorio</span>
             </p>
             <input type="submit" value="Registrarse" class="btn btn-primary">
-            </form>
+            </form><br>
       </div>
   </div>
 </div>

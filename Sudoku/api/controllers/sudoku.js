@@ -9,13 +9,7 @@ var Grid = require('../models/grid');
 var Game = require('../models/game');
 var User = require('../models/user');
 var jwt = require('../services/jwt');
-
-function pruebas(req, res) {
-    res.status(200).send({
-        message: 'Probando una accion del controlador de usuarios del API Rest'
-    });
-}
-
+/*
 let sudoku1 = [[0,0,0,2,6,0,7,0,1],
                [6,8,0,0,7,0,0,9,0],
                [1,9,0,8,3,4,5,6,0],
@@ -34,7 +28,7 @@ let sudoku2 = [[0,0,0,2,6,0,7,0,1],
                [0,5,0,0,0,3,0,2,8],
                [0,0,0,3,0,0,0,7,0],
                [0,4,0,0,5,0,0,3,6],
-               [7,0,0,0,1,8,0,0,0]]; // Este es el primer sudoku
+               [7,0,0,0,1,8,0,0,0]]; // Este es el segundo sudoku
             
 let sudoku3 = [[0,0,0,2,6,0,0,0,1],
                [0,8,0,0,7,0,0,9,0],
@@ -44,8 +38,8 @@ let sudoku3 = [[0,0,0,2,6,0,0,0,1],
                [0,0,0,0,0,3,0,2,8],
                [0,0,9,3,0,0,0,7,4],
                [0,4,0,0,5,0,0,3,0],
-               [7,0,0,0,1,8,0,0,0]]; // Este es el primer sudoku
-
+               [7,0,0,0,1,8,0,0,0]]; // Este es el tercer sudoku
+*/
 function insertGrid(req, res) {
     var grid = new Grid();
     grid.data = new Array();
@@ -76,10 +70,6 @@ function insertGrid(req, res) {
             }
         });
 }
-
-// 59bb188b831ba28a64fd9d4d FACIL
-// 59bf0729a0be6dc70f0f8dfa MEDIO
-// 59bf0752f8ebcdc737d021bb DIFICIL
 
 function getGrid(req, res) {
     var gridId = req.params.id;
@@ -137,11 +127,6 @@ function insertGame(req, res) {
                     });
 
 }
-
-// 59befdd23d513cc0d5b6f542 ID USUARIO
-
-// 59befdd23d513cc0d5b6f543 ID GRID
-
 function getGame(req, res) {
     var userName = req.params.id;
     
@@ -157,8 +142,6 @@ function getGame(req, res) {
          }
        });
 }
-
-// 59bec863507ffd9fb103a873
 
 function getGames(req, res) {
         if(req.params.page) {
@@ -196,7 +179,6 @@ function deleteAllGames(req, res) {
 }
 
 module.exports = {
-    pruebas,
     insertGrid,
     getGrid,
     insertGame,

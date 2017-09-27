@@ -8,7 +8,6 @@ var md_auth = require('../middlewares/authenticated');
 
 var multipart = require('connect-multiparty');
 
-api.get('/sudoku/probando-controlador', md_auth.ensureAuth, SudokuController.pruebas);
 api.post('/sudoku/insert-grid', SudokuController.insertGrid);
 api.get('/sudoku/get-grid/:id', SudokuController.getGrid);
 api.post('/sudoku/insert-game', SudokuController.insertGame);

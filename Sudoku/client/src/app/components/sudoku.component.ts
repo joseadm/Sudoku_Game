@@ -50,7 +50,6 @@ export class SudokuComponent implements OnInit {
     ngOnInit() {
         console.log('sudoku.compose.ts cargando...');
         this.getGrid(); // Trae de mongo el grid
-        console.log(this.user);
         const s = (p) => {
                   let canvas;
             
@@ -164,7 +163,6 @@ export class SudokuComponent implements OnInit {
                   this.grid.setCell(this.gridMongo.data[row][col].value,row,col);
                 }
               }
-              this.grid.toString();
               this.grid.createSpaces();
             }
           }, error => {
@@ -211,7 +209,6 @@ export class SudokuComponent implements OnInit {
             if(!response.game) {
                 this._router.navigate(['/']);
             } else {
-              console.log(response.game);
               this.gridMongo = response.game.grid;
               for (var row = 0; row < 9; row++) {
                 for (var col = 0; col < 9; col++) {

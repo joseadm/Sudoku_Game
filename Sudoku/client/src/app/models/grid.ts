@@ -1,39 +1,43 @@
 import { Cell } from './cell';
 
+const n = 9;
+
 export class Grid {
     data: Array<any>;
     rows: Array<any>;
     cols: Array<any>;
     squares: Array<any>;
-
+    range: Array<any>;
     constructor() {
         this.data = new Array();
         this.rows = new Array();
         this.cols = new Array();
         this.squares = new Array();
-        for(var i=0; i<9; i++) {
+        this.range = Array.from({length : n}, (_, i) => i);
+
+        this.range.forEach((i)=> {
             this.data[i] = new Array();
-            for(var j=0; j<9; j++) {
+            this.range.forEach((j)=> {
                 this.data[i][j] = new Cell(0,i,j);
-            }
-        }
+            });
+          });
         this.checker();
     }
     createSpaces() {
-      for (var row = 0; row < 9; row++) {
-        for (var col = 0; col < 9; col++) {
+      this.range.forEach((row)=> {
+        this.range.forEach((col)=> {
           this.getCell(row, col).fixed = this.getCell(row, col).value != 0;
           this.getCell(row, col).visible = this.getCell(row, col).value != 0;
-        }
-      }
+        });
+      });
     }
 
     showSpaces() {
-      for (var row = 0; row < 9; row++) {
-        for (var col = 0; col < 9; col++) {
+      this.range.forEach((row)=> {
+        this.range.forEach((col)=> {
           this.getCell(row, col).visible = this.getCell(row, col).value != 0;
-        }
-      }
+        });
+      });
     }
 
     setCell(value, row, col) {
@@ -42,36 +46,27 @@ export class Grid {
     getCell(row: any, col: any) {
         return this.data[row][col];
     }
-    toString() {
-        var cadena = "";
-        for(var i=0; i<9; i++) {
-            for(var j=0; j<9; j++) {
-                cadena += '|'+this.data[i][j].getValue()+"|";
-                if(j==8) cadena += '\n';
-            }
-        }
-        console.log(cadena);
-    }
+
     checker() {
-        for (var idx = 0; idx < 9; idx++) {
+      this.range.forEach((idx)=> {
             this.rows[idx] = new Array();
             this.cols[idx] = new Array();
             this.squares[idx] = new Array();
-          }
+          });
           var idx = 0;
-          for (var row = 0; row < 9; row++) {
-            for (var col = 0; col < 9; col++) {
+          this.range.forEach((row)=> {
+            this.range.forEach((col)=> {
               this.rows[row].push(this.getCell(row, col));
               this.cols[col].push(this.getCell(row, col));
               idx++;
-            }
-          }
-          for (var row = 0; row < 9; row++) {
-            for (var col = 0; col < 9; col++) {
+            });
+          });
+          this.range.forEach((row)=> {
+            this.range.forEach((col)=> {
               var indexSqr = Math.floor(row / 3) + Math.floor(col / 3) + 2 * Math.floor(col / 3);
               this.squares[indexSqr].push(this.getCell(row, col));
-            }
-          }
+            });
+          });
     }
     isValid(array: any) {
         var valid = true;
@@ -96,7 +91,7 @@ export class Grid {
       }
       check() {
         var error = false;
-        for (var i = 0; i < 9; i++) {
+        this.range.forEach((i)=> {
           //Check squares
           if (!this.isValid(this.squares[i])) {
             error = true;
@@ -120,7 +115,7 @@ export class Grid {
               this.cols[i][j].lightError = true;
             }
           }
-        }
+        });
     
         if (!error) {
           var completed = true;
