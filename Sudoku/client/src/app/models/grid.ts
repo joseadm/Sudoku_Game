@@ -1,19 +1,18 @@
 import { Cell } from './cell';
 
-const n = 9;
-
 export class Grid {
     data: Array<any>;
     rows: Array<any>;
     cols: Array<any>;
     squares: Array<any>;
     range: Array<any>;
+
     constructor() {
         this.data = new Array();
         this.rows = new Array();
         this.cols = new Array();
         this.squares = new Array();
-        this.range = Array.from({length : n}, (_, i) => i);
+        this.range = Array.from({length : 9}, (_, i) => i);
 
         this.range.forEach((i)=> {
             this.data[i] = new Array();
@@ -119,12 +118,12 @@ export class Grid {
     
         if (!error) {
           var completed = true;
-          for (var row = 0; row < 9; row++) {
-            for (var col = 0; col < 9; col++) {
+          this.range.forEach((row)=> {
+            this.range.forEach((col)=> {
               if (this.getCell(row, col).value < 1)
                 completed = false;
-            }
-          }
+            });
+          });
         }
         return completed;
       }

@@ -29,6 +29,7 @@ export class SudokuComponent implements OnInit {
     public gridMongo: Grid;
     public gameMongo: Game;
     public alertRegister;
+    public range;
 
     constructor(
         private _route: ActivatedRoute,
@@ -44,15 +45,14 @@ export class SudokuComponent implements OnInit {
         this.game = new Game(this.user, this.grid);
         this.game_inserted = new Game(this.user, this.grid);
         this.gameMongo = new Game(new User('','','',''), new Grid());
-        this.titulo = 'Jugar Sudoku'
+        this.titulo = 'Jugar Sudoku';
+        this.range = Array.from({length : 9}, (_, i) => i);
     }
 
     ngOnInit() {
         console.log('sudoku.compose.ts cargando...');
-        this.getGrid(); // Trae de mongo el grid
         const s = (p) => {
                   let canvas;
-            
                   p.setup = () => {
                     canvas = p.createCanvas(451, 451);
                     canvas.parent('sudokuGrid');
@@ -73,8 +73,8 @@ export class SudokuComponent implements OnInit {
                     p.fill(255, 255, 255, 255);
                     p.rect(0, 0, 450, 450);
                     // Dibuja las celdas
-                    for (var row = 0; row < 9; row++) {
-                        for (var col = 0; col < 9; col++) {
+                    this.range.forEach((row)=> {
+                      this.range.forEach((col)=> {
                             p.fill(255, 255, 255, 128);
                           if (row % 3 === 0 && col % 3 === 0) {
                             p.strokeWeight(3);
@@ -102,11 +102,11 @@ export class SudokuComponent implements OnInit {
                                 p.textStyle(p.NORMAL);
                             p.text(this.grid.getCell(row, col).value, col * 50 + 50 / 4, row * 50 + 50 / 1.5);
                           }
-                          // Errores falsos
+                          // Errores deshabilitados
                           this.grid.getCell(row, col).error = false;
                           this.grid.getCell(row, col).lightError = false;
-                        }
-                    }
+                        });
+                    });
                   }
 
                   p.mousePressed = () => {

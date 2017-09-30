@@ -5,9 +5,12 @@ export class Game {
     user: User;
     grid: Grid;
     selectedCell: any;
+    range: Array<any>;
+    
     constructor(user: User, grid: Grid) {
         this.user = user;
         this.grid = grid;
+        this.range = Array.from({length : 9}, (_, i) => i);
     }
     checkGrid() {
         return this.grid.check();
@@ -20,11 +23,11 @@ export class Game {
       }
     setSelectedCell(cell) {
         this.selectedCell = cell;
-        for (var row = 0; row < 9; row++) {
-          for (var col = 0; col < 9; col++) {
+        this.range.forEach((row)=> {
+          this.range.forEach((col)=> {
             this.grid.getCell(row, col).highlight = (this.grid.getCell(row, col).value === cell.value);
-          }
-        }
+          });
+        });
       }
       getCellAt(x, y) {
         var row = Math.floor(y / 50);
