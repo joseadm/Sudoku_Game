@@ -2,7 +2,7 @@
 
 var mongoose = require('mongoose');
 var app = require('./app');
-var port = process.env.PORT || 3000;
+var port = process.env.PORT || 8080;
 
 mongoose.Promise = global.Promise;
 mongoose.connect('mongodb://localhost:27017/sudoku', { useMongoClient: true})
