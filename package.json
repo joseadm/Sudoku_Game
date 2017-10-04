@@ -4,7 +4,7 @@
   "description": "Proyecto de API Rest con NodeJS",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
+    "start": "nodemon index",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Jose Delgado",
