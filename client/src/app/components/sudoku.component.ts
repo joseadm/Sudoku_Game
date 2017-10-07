@@ -83,7 +83,7 @@ export class SudokuComponent implements OnInit {
                           } 
                           // Escoje el color de cada celda
                           if (this.grid.getCell(row, col) === this.game.selectedCell) {
-                            p.fill(51, 133, 255, 255);
+                            p.fill(p.color('#1E88E5'));
                           } else if (this.grid.getCell(row, col).error) {
                             p.fill(255, 77, 77, 255);
                           } else if (this.grid.getCell(row, col).lightError) {
@@ -149,7 +149,7 @@ export class SudokuComponent implements OnInit {
 
     getGrid() {
       this._route.params.forEach((params: Params) => {
-        let id = "59bb188b831ba28a64fd9d4d";
+        let id = "59d83b736c7b283f0f8833c2";
         
         this._sudokuService.getGrid(this.token, id).subscribe(
           response => {

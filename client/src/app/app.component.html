@@ -18,7 +18,7 @@
       </div>
 </nav>
 
-<div class="container-fluid" *ngIf="identity">
+<div class="container-fluid content" *ngIf="identity">
   <div class="row">
     <nav class="col-sm-3 col-md-2 d-none d-sm-block bg-light sidebar">
       <ul class="nav nav-pills flex-column">
@@ -45,17 +45,18 @@
   </div>
 </div>
 
-<div class="container">
+<div class="container" *ngIf="!identity">
+    <h1 class="title">Sudoku <i class="fa fa-gamepad" aria-hidden="true"></i></h1><hr><br><br>
 <div class="row">
   <!-- Inicio -->
-  <div class="col-sm-6 inicio_sesion" *ngIf="!identity">
-      <h1>Iniciar Sesion</h1>
-      <div *ngIf="errorMessage" class="alert alert-warning">
-        <strong>Error</strong> {{errorMessage}}
-      </div>
+  <div class="col-sm-12 col-md-6 inicio_sesion" *ngIf="!identity">
 
-      <form #loginForm="ngForm" (ngSubmit)="onSubmit()" class="col-md-10">
-      <p>
+      <form #loginForm="ngForm" (ngSubmit)="onSubmit()" class="col-md-10 form-signin">
+        <h1>Iniciar Sesion</h1><hr>
+        <div *ngIf="errorMessage" class="alert alert-warning">
+          <strong>Error</strong> {{errorMessage}}
+        </div>
+        <p>
         <label>Usuario: </label>
         <input type="username" #username="ngModel" name="username" [(ngModel)]="user.username"
         class="form-control" required />
@@ -67,13 +68,13 @@
           <input type="submit" value="Entrar" class="btn btn-primary">
         </form>
     </div>
-    <div class="col-lg-6 registrar" *ngIf="!identity">
-        <h1>Registrate</h1>
-        <div *ngIf="alertRegister" class="alert alert-warning">
-            <strong>Error</strong> {{alertRegister}}
-          </div>
-        <form #registerForm = "ngForm" (ngSubmit)="onSubmitRegister()" class="col-md-10">
-        <p><label>Nombre: </label>
+    <div class="col-sm-12 col-md-6 registrar" *ngIf="!identity">
+        <form #registerForm = "ngForm" (ngSubmit)="onSubmitRegister()" class="col-md-10 form-signin">
+          <h1>Registrate</h1><hr>
+          <div *ngIf="alertRegister" class="alert alert-warning">
+              <strong>Error</strong> {{alertRegister}}
+            </div>
+          <p><label>Nombre: </label>
           <input type="text" #name = "ngModel" name = "name" [(ngModel)]="user_register.name" 
           class="form-control" required/>
           <span *ngIf="!name.valid && name.touched">El nombre es obligatorio</span>

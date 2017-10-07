@@ -9,8 +9,8 @@ var Grid = require('../models/grid');
 var Game = require('../models/game');
 var User = require('../models/user');
 var jwt = require('../services/jwt');
-/*
-let sudoku1 = [[0,0,0,2,6,0,7,0,1],
+
+let sudoku_facil = [[0,0,0,2,6,0,7,0,1],
                [6,8,0,0,7,0,0,9,0],
                [1,9,0,8,3,4,5,6,0],
                [8,2,0,1,0,0,0,4,0],
@@ -20,7 +20,7 @@ let sudoku1 = [[0,0,0,2,6,0,7,0,1],
                [0,4,0,0,5,0,0,3,6],
                [7,0,3,0,1,8,0,0,0]]; // Este es el primer sudoku
 
-let sudoku2 = [[0,0,0,2,6,0,7,0,1],
+let sudoku_medio = [[0,0,0,2,6,0,7,0,1],
                [6,8,0,0,7,0,0,9,0],
                [0,9,0,0,3,4,5,6,0],
                [8,2,0,1,0,0,0,4,0],
@@ -30,7 +30,7 @@ let sudoku2 = [[0,0,0,2,6,0,7,0,1],
                [0,4,0,0,5,0,0,3,6],
                [7,0,0,0,1,8,0,0,0]]; // Este es el segundo sudoku
             
-let sudoku3 = [[0,0,0,2,6,0,0,0,1],
+let sudoku_dificil = [[0,0,0,2,6,0,0,0,1],
                [0,8,0,0,7,0,0,9,0],
                [1,9,0,8,0,4,5,0,0],
                [0,2,0,1,0,0,0,4,0],
@@ -39,7 +39,7 @@ let sudoku3 = [[0,0,0,2,6,0,0,0,1],
                [0,0,9,3,0,0,0,7,4],
                [0,4,0,0,5,0,0,3,0],
                [7,0,0,0,1,8,0,0,0]]; // Este es el tercer sudoku
-*/
+
 function insertGrid(req, res) {
     var grid = new Grid();
     grid.data = new Array();
@@ -48,7 +48,7 @@ function insertGrid(req, res) {
         grid.data[i] = new Array();
         for(var j=0; j<9; j++) {
             var cell = new Cell();
-            cell.value = sudoku1[i][j];
+            cell.value = sudoku_facil[i][j];
             cell.row = i;
             cell.col = j;
             cell.error = false;
