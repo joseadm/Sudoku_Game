@@ -31,6 +31,14 @@ export class SudokuService {
         return this._http.post(this.url+'sudoku/insert-game', params, {headers: headers})
             .map(res => res.json());
     }
+    rSolveGame(game_insert){
+         let params = JSON.stringify(game_insert);
+        
+        let headers = new Headers({'Content-Type':'application/json'});
+
+        return this._http.post(this.url+'sudoku/rSolve', params, {headers: headers})
+            .map(res => res.json());   
+    }
 
     getGame(token, id: string) {
         let headers = new Headers({

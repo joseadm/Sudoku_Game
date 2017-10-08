@@ -9,6 +9,7 @@ var Grid = require('../models/grid');
 var Game = require('../models/game');
 var User = require('../models/user');
 var jwt = require('../services/jwt');
+const {SudokuSolver} = require('../models/solver/solver');
 
 let sudoku_facil = [[0,0,0,2,6,0,7,0,1],
                [6,8,0,0,7,0,0,9,0],
@@ -173,9 +174,66 @@ function deleteAllGames(req, res) {
         if(err){
             res.status(500).send({message: 'Error en la peticion'});
         }else{
-                res.status(404).send({message: 'Juegos eliminados'});
+            res.status(404).send({message: 'Juegos eliminados'});
         }
     });
+}
+function toMatriz(grid){
+    var arr = []
+    for(let k of grid.data){
+        k.forEach(cell=>{arr.push(cell.value)})
+    }
+    
+    let sudoku = new Array();
+    for(let i = 0; i < 9; i++){
+        sudoku.push(new Array());
+        for(let j = 0; j < 9; j++){
+            sudoku[i].push(arr.shift());
+        }
+    }
+    return sudoku;
+}
+function rsolve_sudoku(req, res){
+    
+    var params = req.body;
+    var grid = new Grid();
+    
+    let sudoku = toMatriz(params.grid);
+    console.log("Resolver sudoku");
+    console.log(sudoku);
+    let sudokuSolver = new SudokuSolver(sudoku);
+    sudokuSolver.solve();
+
+    let resuelto = ()=>{
+        if(sudokuSolver.solution){
+            console.log("Solucion");
+            console.log(sudokuSolver.solution);
+
+            var grid = new Grid();
+            grid.data = new Array();
+
+            for(var i=0; i<9; i++) {
+                grid.data[i] = new Array();
+                for(var j=0; j<9; j++) {
+                    var cell = new Cell();
+                    cell.value = sudokuSolver.solution[i][j];
+                    cell.row = i;
+                    cell.col = j;
+                    cell.error = false;
+                    cell.lightError = false;
+                    cell.visible = false;
+                    cell.fixed = false;
+                    grid.data[i][j] = cell;
+                }
+            }
+
+            res.status(200).send({grid});    
+        }else{
+            setTimeout(()=>{resuelto();},1000);    
+        }
+    }
+
+    resuelto();
 }
 
 module.exports = {
@@ -184,5 +242,6 @@ module.exports = {
     insertGame,
     getGame,
     getGames,
-    deleteAllGames
+    deleteAllGames,
+    rsolve_sudoku
 };
