@@ -10,10 +10,13 @@ var multipart = require('connect-multiparty');
 
 api.post('/sudoku/insert-grid', SudokuController.insertGrid);
 api.get('/sudoku/get-grid/:id', SudokuController.getGrid);
+api.get('/sudoku/get-grids', SudokuController.getGrids);
+api.get('/sudoku/get-grid-diff/:difficulty', SudokuController.getGridDifficulty);
 api.post('/sudoku/insert-game', SudokuController.insertGame);
 api.get('/sudoku/get-game/:id', SudokuController.getGame);
 api.get('/sudoku/get-games:page?', SudokuController.getGames);
 api.delete('/sudoku/deleteAll', SudokuController.deleteAllGames);
+api.delete('/sudoku/deleteAllGrids', SudokuController.deleteAllGrids);
 
 api.post('/sudoku/rsolve', SudokuController.rsolve_sudoku);
 

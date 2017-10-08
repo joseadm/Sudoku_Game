@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from './services/user.service';
+import { SudokuService } from './services/sudoku.service';
 import { User } from './models/user';
 import { GLOBAL } from './services/global';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  providers :[UserService],
+  providers :[UserService, SudokuService],
   styleUrls: ['./app.component.css']
 })
 
@@ -21,7 +22,8 @@ export class AppComponent implements OnInit {
   public url;
 
   constructor(
-    private _userService: UserService
+    private _userService: UserService,
+    private _sudokuService: SudokuService
   ) {
     this.url = GLOBAL.url;
     this.user = new User('','','','');
@@ -39,12 +41,18 @@ export class AppComponent implements OnInit {
       response => {
         let identity = response.user;
         this.identity = identity;
+        this._sudokuService.insertGrids().subscribe(
+          response => {
+          },
+          error => {
+              console.log(error);
+            }
+        );
 
         if(!this.identity._id) {
           alert("El usuario no esta correctamente identificado");
         } else {
         localStorage.setItem('identity', JSON.stringify(identity));
-
           this._userService.signup(this.user, true).subscribe(
             response => {
               let token = response.token;

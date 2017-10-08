@@ -23,6 +23,13 @@ export class SudokuService {
                          .map(res => res.json());
     }
 
+    insertGrids() {
+        let headers = new Headers({'Content-Type':'application/json'});
+
+        return this._http.post(this.url+'sudoku/insert-grid', {headers: headers})
+            .map(res => res.json());
+    }
+
     insertGame(game_insert) {
         let params = JSON.stringify(game_insert);
         
@@ -30,14 +37,6 @@ export class SudokuService {
 
         return this._http.post(this.url+'sudoku/insert-game', params, {headers: headers})
             .map(res => res.json());
-    }
-    rSolveGame(game_insert){
-         let params = JSON.stringify(game_insert);
-        
-        let headers = new Headers({'Content-Type':'application/json'});
-
-        return this._http.post(this.url+'sudoku/rSolve', params, {headers: headers})
-            .map(res => res.json());   
     }
 
     getGame(token, id: string) {
@@ -49,5 +48,24 @@ export class SudokuService {
         return this._http.get(this.url+'sudoku/get-game/'+id, options)
                          .map(res => res.json());
     }
+
+    getGridDifficulty(token, difficulty: string) {
+        let headers = new Headers({
+            'Content-Type':'application/json',
+            'Authorization':token
+        });
+        let options = new RequestOptions({headers:headers});
+        return this._http.get(this.url+'sudoku/get-grid-diff/'+difficulty, options)
+                         .map(res => res.json());
+    }
+
+    rSolveGame(game_insert){
+        let params = JSON.stringify(game_insert);
+       
+       let headers = new Headers({'Content-Type':'application/json'});
+
+       return this._http.post(this.url+'sudoku/rSolve', params, {headers: headers})
+           .map(res => res.json());   
+   }
 
 }
