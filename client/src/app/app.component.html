@@ -54,7 +54,7 @@
       <form #loginForm="ngForm" (ngSubmit)="onSubmit()" class="col-md-10 form-signin">
         <h1>Iniciar Sesion</h1><hr>
         <div *ngIf="errorMessage" class="alert alert-warning">
-          <strong>Error</strong> {{errorMessage}}
+          {{errorMessage}}
         </div>
         <p>
         <label>Usuario: </label>
@@ -72,7 +72,7 @@
         <form #registerForm = "ngForm" (ngSubmit)="onSubmitRegister()" class="col-md-10 form-signin">
           <h1>Registrate</h1><hr>
           <div *ngIf="alertRegister" class="alert alert-warning">
-              <strong>Error</strong> {{alertRegister}}
+              {{alertRegister}}
             </div>
           <p><label>Nombre: </label>
           <input type="text" #name = "ngModel" name = "name" [(ngModel)]="user_register.name" 

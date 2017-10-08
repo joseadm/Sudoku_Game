@@ -183,9 +183,11 @@ export class SudokuComponent implements OnInit {
           this.game_inserted = game;
           if(!game) {
             this.alertRegister = 'Error al registrarse';
+            setTimeout(function(){ this.alertRegister = false }.bind(this), 3000);
           } else {
             this.alertRegister = 'Registro se ha realizado correctamente';
             this.game_inserted = new Game(this.user,this.grid);
+            setTimeout(function(){ this.alertRegister = false }.bind(this), 3000);            
           }
         },
         error => {

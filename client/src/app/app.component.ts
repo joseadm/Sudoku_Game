@@ -41,13 +41,6 @@ export class AppComponent implements OnInit {
       response => {
         let identity = response.user;
         this.identity = identity;
-        this._sudokuService.insertGrids().subscribe(
-          response => {
-          },
-          error => {
-              console.log(error);
-            }
-        );
 
         if(!this.identity._id) {
           alert("El usuario no esta correctamente identificado");
@@ -71,7 +64,6 @@ export class AppComponent implements OnInit {
               if(errorMessage != null) {
                 var body = JSON.parse(error._body);
                 this.errorMessage = body.message;
-                console.log(error);
               }
             }
           );
@@ -100,13 +92,26 @@ export class AppComponent implements OnInit {
     console.log(this.user_register);
     this._userService.register(this.user_register).subscribe(
       response => {
+
         let user = response.user;
         this.user_register = user;
+
+        // Insertar los grids cada vez que se registra un usuario
+        this._sudokuService.insertGrids().subscribe(
+          response => {
+          },
+          error => {
+              console.log(error);
+            }
+        );
+
         if(!user._id) {
           this.alertRegister = 'Error al registrarse';
+          setTimeout(function(){ this.alertRegister = false }.bind(this), 3000);
         } else {
           this.alertRegister = 'Registro se ha realizado correctamente';
           this.user_register = new User('','','','');
+          setTimeout(function(){ this.alertRegister = false }.bind(this), 3000);
         }
       },
       error => {
