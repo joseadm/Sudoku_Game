@@ -15,7 +15,7 @@ class Range{
 		return { value: undefined, done: true }
 	}
 	nextRandom(min, max){//floor, sin decimales//(max-min)+min
-		return Math.floor(Math.random() * (max - min)) + min;
+		return Math.floor(Math.random() * ((max+1) - min)) + min;
 	}
 	[Symbol.iterator](){
     	return this;

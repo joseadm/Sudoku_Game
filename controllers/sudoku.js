@@ -9,39 +9,23 @@ var Grid = require('../models/grid');
 var Game = require('../models/game');
 var User = require('../models/user');
 var jwt = require('../services/jwt');
+
+//a6r1an////////////////////////////////////////////////////////////////////////////
 const {SudokuSolver} = require('../models/solver/solver');
+const {Generator} = require('../models/solver/generator');
+const {arrayOfSudokus} = require('../models/solver/sudokus');
+const {clock} = require('../models/solver/test_sudoku')
+//a6r1an////////////////////////////////////////////////////////////////////////////
 
-let sudoku_easy = [[0,0,7,0,0,0,0,3,0],
-                  [0,0,0,7,4,6,2,8,0],
-                  [5,0,4,0,3,2,0,0,7],
-                  [0,2,0,9,0,5,0,0,3],
-                  [0,0,0,0,7,0,8,2,0],
-                  [0,3,0,0,2,0,7,5,9],
-                  [3,0,6,0,0,9,0,0,0],
-                  [0,0,2,0,6,7,9,0,0],
-                  [0,7,0,0,0,0,0,4,0]]; // Este es el primer sudoku
-
-let sudoku_medium = [[0,0,6,0,2,7,9,0,5],
-                    [5,0,0,6,0,0,8,0,0],
-                    [0,0,0,0,0,5,0,0,2],
-                    [0,0,5,0,3,0,0,0,4],
-                    [0,0,0,2,0,8,3,0,0],
-                    [0,3,7,0,4,6,0,0,0],
-                    [2,0,0,3,0,0,0,0,6],
-                    [0,7,4,0,0,9,5,0,8],
-                    [0,6,0,0,7,0,0,0,0]]; // Este es el segundo sudoku
-            
-let sudoku_hard = [[0,0,0,0,0,0,0,1,0],
-                  [0,0,6,0,0,0,0,2,3],
-                  [0,2,0,0,3,0,4,0,0],
-                  [8,0,0,0,0,5,0,0,0],
-                  [0,3,0,0,1,0,0,0,4],
-                  [0,0,9,6,0,0,0,0,0],
-                  [0,0,0,9,0,0,7,0,0],
-                  [0,1,0,0,2,0,0,4,0],
-                  [5,0,0,0,0,8,0,0,0]]; // Este es el tercer sudoku
 
 function insertGrid(req, res) {
+    //a6r1an////////////////////////////////////////////////////////////////////////////
+    let sudokus = arrayOfSudokus();
+
+    let sudoku_easy = sudokus.find(x=>x.sudoku_easy).sudoku_easy;
+    let sudoku_medium = sudokus.find(x=>x.sudoku_medium).sudoku_medium;
+    let sudoku_hard = sudokus.find(x=>x.sudoku_hard).sudoku_hard;
+    //a6r1an////////////////////////////////////////////////////////////////////////////
 
     var grid_easy = new Grid();
     var grid_medium = new Grid();
@@ -165,7 +149,7 @@ function getGrids(req, res) {
 function getGridDifficulty(req, res) {
     var gridDifficulty = req.params.difficulty;
     
-        Grid.findOne({difficulty : gridDifficulty}).populate({path: 'grid'}).exec((err, grid) => {
+        /*Grid.findOne({difficulty : gridDifficulty}).populate({path: 'grid'}).exec((err, grid) => {
          if(err) {
              res.status(500).send({message: 'Error en la peticion'});
          } else {
@@ -175,7 +159,14 @@ function getGridDifficulty(req, res) {
                  res.status(200).send({grid});
              }
          }
-       });
+       });*/
+       console.log(`difficulty: ${gridDifficulty}`);
+       let generator = new Generator();
+       generator.newSudoku();
+       let sudoku = generator.dispertion(gridDifficulty);
+       let grid = newGrid(sudoku);
+
+       res.status(200).send({grid});
 }
 
 function insertGame(req, res) {
@@ -278,8 +269,8 @@ function deleteAllGrids(req, res) {
         }
     });
 }
-
-function toMatriz(grid){
+//a6r1an////////////////////////////////////////////////////////////////////////////
+function gridToMatriz(grid){
     var arr = []
     for(let k of grid.data){
         k.forEach(cell=>{arr.push(cell.value)})
@@ -294,48 +285,47 @@ function toMatriz(grid){
     }
     return sudoku;
 }
-function rsolve_sudoku(req, res){
-    
-    var params = req.body;
-    var grid = new Grid();
-    
-    let sudoku = toMatriz(params.grid);
-    console.log("Resolver sudoku");
-    console.log(sudoku);
-    let sudokuSolver = new SudokuSolver(sudoku);
-    sudokuSolver.solve();
-
-    let resuelto = ()=>{
-        if(sudokuSolver.solution){
-            console.log("Solucion");
-            console.log(sudokuSolver.solution);
-
-            var grid = new Grid();
-            grid.data = new Array();
-
-            for(var i=0; i<9; i++) {
-                grid.data[i] = new Array();
-                for(var j=0; j<9; j++) {
-                    var cell = new Cell();
-                    cell.value = sudokuSolver.solution[i][j];
-                    cell.row = i;
-                    cell.col = j;
-                    cell.error = false;
-                    cell.lightError = false;
-                    cell.visible = false;
-                    cell.fixed = false;
-                    grid.data[i][j] = cell;
-                }
-            }
-
-            res.status(200).send({grid});    
-        }else{
-            setTimeout(()=>{resuelto();},1000);    
+function newGrid(sudoku){
+    let grid = new Grid();
+    grid.data = new Array();
+    for(var i=0; i<9; i++) {
+        grid.data[i] = new Array();
+        for(var j=0; j<9; j++) {
+            var cell = new Cell();
+            cell.value = sudoku[i][j];
+            cell.row = i;
+            cell.col = j;
+            cell.error = false;
+            cell.lightError = false;
+            cell.visible = false;
+            cell.fixed = false;
+            grid.data[i][j] = cell;
         }
     }
-
-    resuelto();
+    return grid;
 }
+function rsolve_sudoku(req, res){
+    let params = req.body;
+    let grid = new Grid();
+    
+    let sudoku = gridToMatriz(params.grid);
+    console.log("Resolviendo sudoku");
+    console.log(sudoku);
+
+    let sudokuSolver = new SudokuSolver(sudoku);
+    let start = clock();
+    sudokuSolver.solve();//solo encuentra una solucion
+    //sudokuSolver.findSolutions();//encuentra mas de una solucion
+    let duration = clock(start);    
+
+    console.log(`solucion`);
+    console.log(sudokuSolver.solutions[0]);    
+    console.log(`tiempo de resolucion:\n\t ${duration} ms\n\t ${duration/1000} seg\n\t ${(duration/1000)/60} min`);
+
+    grid = newGrid(sudokuSolver.solutions[0])
+    res.status(200).send({grid});    
+}
+//a6r1an////////////////////////////////////////////////////////////////////////////
 
 module.exports = {
     insertGrid,

@@ -1,12 +1,10 @@
-/*
-	author: Adrian Prendas Araya
-*/
 let {Range} = require('./range');
 
 class SudokuSolver {
-	constructor(s){
-		this.rows = s;
-		this.solution = undefined;
+	constructor(sudoku){
+		this.initialSudoku = sudoku;
+		this.solutions = [];
+		this.endOfCalculation = false;
 	}
 	row(sudoku,x){
 		return sudoku[x];
@@ -16,25 +14,17 @@ class SudokuSolver {
 		sudoku.forEach(x => colum.push(x[y]));
 		return colum;
 	}
-	square3x3(sudoku,x,y){
-		let s = 0;
-		let square = new Array();
-		for(let i = 0; i < 3; i++){
-			square.push(new Array());
-		}
+	square3x3(sudoku,x,y){//O(9)
+		let arr = [];
 		let dx = Math.floor(x/3);
 		let dy = Math.floor(y/3);
-		for(let i = 0; i < sudoku.length; i++){
-			for(let j = 0; j < sudoku[0].length; j++){
-				if(dx == Math.floor(i/3) && dy == Math.floor(j/3)){
-					if(square[s].length == 3) s++;
-					square[s].push(sudoku[i][j]);
-				}
+		let lenI = (dx*3)+3;
+		let lenJ = (dy*3)+3;
+		for(let i = dx*3; i < lenI ; i++){
+			for(let j = dy*3; j <lenJ; j++){
+				arr.push(sudoku[i][j]);
 			}
 		}
-		let arr = [];
-		for(let l of square)
-			arr = arr.concat(l);
 		return arr;
 	}
 	contains(x,y,sudoku){
@@ -49,13 +39,13 @@ class SudokuSolver {
 	emptySpaces(){
 		let rand = new Range([]);
 		let obj = {};
-		for(let i = 0; i < this.rows.length; i++){
-			for(let j = 0; j < this.rows[0].length; j++){
-				if(this.rows[i][j]==0){
+		for(let i = 0; i < this.initialSudoku.length; i++){
+			for(let j = 0; j < this.initialSudoku[0].length; j++){
+				if(this.initialSudoku[i][j]==0){
 					for(;;){
 						let r = rand.nextRandom(0,100);
 						if(!obj[r]){
-							obj[r] = {position:[i,j]};
+							obj[r] = [i,j];
 							break;
 						}
 					}
@@ -73,15 +63,17 @@ class SudokuSolver {
 		}
 		return c;
 	}
-	completed(sudoku){
-		for(let i = 0; i < sudoku.length; i++){
-			for(let j = 0; j < sudoku[0].length; j++){
-				if(sudoku[i][j]<1) return false;
+	getHash(sudoku){
+		if(!sudoku)sudoku = this.initialSudoku;
+		let str = "";
+		for(let i = 0; i < 9; i++){
+			for(let j = 0; j < 9; j++){
+				str += sudoku[i][j];
 			}
 		}
-		return true;
+		return str;
 	}
-	copy(sudoku){
+	copy(sudoku){//O(81)
 		let s = new Array();
 		for(let i = 0; i < sudoku.length; i++){
 			s.push(new Array());
@@ -91,54 +83,78 @@ class SudokuSolver {
 		}
 		return s;
 	}
-	solve(){
-		let emptySpaces = this.emptySpaces();
-		let rsolve = (sudoku,spaces,i)=>{
-			if(i==Object.keys(spaces).length)return;
-			let [x,y] = spaces[Object.keys(spaces)[i]].position;
-			let contains = this.contains(x,y,sudoku);
-			let range = new Range(contains);
-			for(let n of range){
-				if(!this.solution){
-					sudoku[x][y] = n;
-					if(this.completed(sudoku))this.solution = sudoku;
-					let s = this.copy(sudoku);
-					rsolve(s,spaces,i+1);	
-				}
-			}
-		}
-		rsolve(this.rows,emptySpaces,0);
-	}
-	resolver(){
+	solvePrint(){
 		let count = 0;
 		let emptySpaces = this.emptySpaces();
 		console.log('length: '+Object.keys(emptySpaces).length);
 		console.log(emptySpaces);
 		let rsolve = (sudoku,spaces,i)=>{
-			if(i==Object.keys(spaces).length)return;
-			let [x,y] = spaces[Object.keys(spaces)[i]].position;
+			if(i==Object.keys(spaces).length)
+				return this.solutions.push(sudoku);
+			let [x,y] = spaces[Object.keys(spaces)[i]];
 			let contains = this.contains(x,y,sudoku);
 			let range = new Range(contains);
 			console.log(`{contenidos: ${contains}}`);
 			console.log(`{posibles: ${[...range]}}`);
 			for(let n of range){
-				if(!this.solution){
+				if(this.solutions.length==0){
 					setTimeout(()=>{
 						sudoku[x][y] = n;
-						if(this.completed(sudoku))this.solution = sudoku;
 						let c = this.countEmptySpaces(sudoku);
 						console.log(`{x:${x}, y:${y}, n:${n}, i:${i}, c:${c}}`);
 						let s = this.copy(sudoku);
 						console.log(s);
 						rsolve(s,spaces,i+1);	
-					},10*count++);
+					},1000*count++);
 				}
 			}
 		}
-		setTimeout(()=>{
-			rsolve(this.rows,emptySpaces,0);
-		},5000);
+		rsolve(this.initialSudoku,emptySpaces,0);
 	}
+	solve(){
+		let emptySpaces = this.emptySpaces();//n=9, O~(n^2)
+		console.log(`espacios en blanco: ${Object.keys(emptySpaces).length}`);
+		let rsolve = (sudoku,spaces,i)=>{
+			if(i==Object.keys(spaces).length)
+				return this.solutions.push(sudoku);
+			let [x,y] = spaces[Object.keys(spaces)[i]];
+			let contains = this.contains(x,y,sudoku);
+			let range = new Range(contains);
+			for(let n of range){
+				if(this.solutions.length==0){
+					sudoku[x][y] = n;
+					let s = this.copy(sudoku);//n=9, O~(n^2)
+					//console.log(s);
+					rsolve(s,spaces,i+1);	
+				}
+			}
+		}
+		rsolve(this.initialSudoku,emptySpaces,0);
+		this.endOfCalculation = true;
+	}
+	findSolutions(){
+		let emptySpaces = this.emptySpaces();//n=9, O~(n^2)
+		console.log(`espacios en blanco: ${Object.keys(emptySpaces).length}`);
+		let rsolve = (sudoku,spaces,i)=>{
+			if(i==Object.keys(spaces).length)
+				return this.solutions.push(sudoku);
+			let [x,y] = spaces[Object.keys(spaces)[i]];
+			let contains = this.contains(x,y,sudoku);
+			let range = new Range(contains);
+			for(let n of range){
+				sudoku[x][y] = n;
+				let s = this.copy(sudoku);//n=9, O~(n^2)
+				//console.log(s);
+				rsolve(s,spaces,i+1);	
+			}
+		}
+		rsolve(this.initialSudoku,emptySpaces,0);
+		this.endOfCalculation = true;
+	}
+}
+
+console.reset = function () {
+  return process.stdout.write('\033c');
 }
 
 module.exports = { SudokuSolver }
