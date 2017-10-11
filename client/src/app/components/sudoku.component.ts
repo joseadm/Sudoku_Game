@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy, HostListener} from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 
 import { UserService } from '../services/user.service';
@@ -15,10 +15,11 @@ import * as p5 from 'p5';
 @Component({
     selector: 'sudoku',
     templateUrl: '../views/sudoku.html',
-    providers: [UserService, SudokuService]
+    providers: [UserService, SudokuService],
+    host: {'window:beforeunload':'setConfirmUnload'}
 })
 
-export class SudokuComponent implements OnInit {
+export class SudokuComponent implements OnInit{
     public identity;
     public token;
     public titulo: string;
@@ -30,6 +31,8 @@ export class SudokuComponent implements OnInit {
     public gameMongo: Game;
     public alertRegister;
     public range;
+    public saved_grid;
+    public unloadMessage;
 
     constructor(
         private _route: ActivatedRoute,
@@ -48,6 +51,11 @@ export class SudokuComponent implements OnInit {
         this.titulo = 'Jugar Sudoku';
         this.range = Array.from({length : 9}, (_, i) => i);
     }
+  
+    @HostListener('window:beforeunload', [ '$event' ])
+    beforeUnloadHander(event) {
+      localStorage.setItem('saved_grid', JSON.stringify(this.grid));
+    }    
 
     ngOnInit() {
         console.log('sudoku.compose.ts cargando...');
@@ -91,6 +99,7 @@ export class SudokuComponent implements OnInit {
                           } else {
                              p.fill(255, 255, 255, 128);
                           } 
+                          
                           // El texto y estilo de cada celda
                           p.rect(col * 50, row * 50, 50, 50);
                           p.fill(0, 0, 0, 255);
@@ -145,6 +154,22 @@ export class SudokuComponent implements OnInit {
                 }
 
                 let player = new p5(s);
+
+                
+                this.getSavedGrid();
+    }
+
+    getSavedGrid() {
+      this.saved_grid = this._sudokuService.getSavedGrid();
+      if(this.saved_grid != null) {
+        for (var row = 0; row < 9; row++) {
+          for (var col = 0; col < 9; col++) {
+            this.grid.setCell(this.saved_grid.data[row][col].value,row,col);
+            this.grid.getCell(row, col).fixed = this.saved_grid.data[row][col].fixed;
+          }
+        }
+        this.grid.createSpaces();
+      }
     }
 
     getGrid() {

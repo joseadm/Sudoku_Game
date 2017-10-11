@@ -8,9 +8,11 @@ import { Grid } from '../models/grid';
 @Injectable()
 export class SudokuService {
     public url: string;
+    public saved_grid: Grid;
 
     constructor(private _http: Http) {
         this.url = GLOBAL.url;
+        this.saved_grid;
     }
 
     getGrid(token, id: string) {
@@ -21,6 +23,16 @@ export class SudokuService {
         let options = new RequestOptions({headers:headers});
         return this._http.get(this.url+'sudoku/get-grid/'+id, options)
                          .map(res => res.json());
+    }
+
+    getSavedGrid() {
+        let saved_grid = JSON.parse(localStorage.getItem('saved_grid'));
+        if(saved_grid != 'undefined') {
+                this.saved_grid = saved_grid;
+        } else {
+            this.saved_grid = null;
+        }
+        return saved_grid;
     }
 
     insertGrids() {
