@@ -309,7 +309,7 @@ function rsolve_sudoku(req, res){
     let grid = new Grid();
     
     let sudoku = gridToMatriz(params.grid);
-    console.log("Resolviendo sudoku");
+    console.log("solving sudoku problem");
     console.log(sudoku);
 
     let sudokuSolver = new SudokuSolver(sudoku);
@@ -318,9 +318,9 @@ function rsolve_sudoku(req, res){
     //sudokuSolver.findSolutions();//encuentra mas de una solucion
     let duration = clock(start);    
 
-    console.log(`solucion`);
+    console.log(`solution`);
     console.log(sudokuSolver.solutions[0]);    
-    console.log(`tiempo de resolucion:\n\t ${duration} ms\n\t ${duration/1000} seg\n\t ${(duration/1000)/60} min`);
+    console.log(`time of resolution:\n\t ${duration} ms\n\t ${duration/1000} seg\n\t ${(duration/1000)/60} min`);
 
     grid = newGrid(sudokuSolver.solutions[0])
     res.status(200).send({grid});    

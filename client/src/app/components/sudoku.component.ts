@@ -12,6 +12,10 @@ import { Game } from '../models/game';
 
 import * as p5 from 'p5';
 
+import { SudokuSolver } from '../models/solver/solver';
+import { Generator } from '../models/solver/generator';
+//import { SudokuSolver } from '../models/solver/solver';
+
 @Component({
     selector: 'sudoku',
     templateUrl: '../views/sudoku.html',
@@ -254,7 +258,21 @@ export class SudokuComponent implements OnInit{
         );
       });
     }
-
+    //a6r1an////////////////////////////////////////////////////////////////////////////
+    createGridDifficultyClient(difficulty){
+      let generator = new Generator();
+      generator.newSudoku();
+      let sudoku = generator.dispertion(difficulty);
+      let grid = this.grid.matrizToGrid(sudoku);
+      this.gridMongo = grid;
+      for (var row = 0; row < 9; row++) {
+        for (var col = 0; col < 9; col++) {
+            this.grid.setCell(this.gridMongo.data[row][col].value,row,col);
+        }
+      }
+      this.grid.createSpaces();
+    }
+    //a6r1an////////////////////////////////////////////////////////////////////////////
     getGridDifficulty(difficulty: string) {
       this._route.params.forEach((params: Params) => {
         this._sudokuService.getGridDifficulty(this.token, difficulty).subscribe(
@@ -263,6 +281,7 @@ export class SudokuComponent implements OnInit{
                 this._router.navigate(['/']);
             } else {
               console.log(response.grid);
+
               this.gridMongo = response.grid;
               for (var row = 0; row < 9; row++) {
                 for (var col = 0; col < 9; col++) {
@@ -272,6 +291,9 @@ export class SudokuComponent implements OnInit{
               this.grid.createSpaces();
             }
           }, error => {
+            //a6r1an////////////////////////////////////////////////////////////////////////////
+            this.createGridDifficultyClient(difficulty);
+            //a6r1an////////////////////////////////////////////////////////////////////////////
             var errorMessage = <any>error;
             if(errorMessage != null) {
               var body = JSON.parse(error._body);
@@ -281,12 +303,49 @@ export class SudokuComponent implements OnInit{
         );
       });
     }
+    //a6r1an////////////////////////////////////////////////////////////////////////////
+    rSolveClient(){
+      let cout = 0;
+      let emptySpaces = this.game.grid.emptySpaces();
 
+      let sudoku = this.grid.gridToMatriz(this.game_inserted);
+
+          console.log("solving sudoku problem");
+          console.log(sudoku);
+          let sudokuSolver = new SudokuSolver(sudoku);
+
+          let start = performance.now();
+          sudokuSolver.solve();//solo encuentra una solucion
+
+          let resuelto=()=>{
+              if(sudokuSolver.solutions.length!=0){
+                //sudokuSolver.findSolutions();//encuentra mas de una solucion
+                let end = performance.now();
+                let duration = end - start;
+                console.log(`solution`);
+                console.log(sudokuSolver.solutions[0]);    
+                console.log(`time of resolution:\n\t ${duration} ms\n\t ${duration/1000} seg\n\t ${(duration/1000)/60} min`);
+                let grid = this.grid.matrizToGrid(sudokuSolver.solutions[0])
+                for(let p in emptySpaces){
+                  setTimeout(()=>{
+                    let [x,y] = emptySpaces[p];
+                    this.game.setSelectedCell(this.game.grid.getCell(x,y));
+                    this.game.setCellValue(this.game.selectedCell, grid.data[x][y].value);
+                  },100*cout++);
+                }
+
+              }else
+                setTimeout(()=>{resuelto()},1000);
+          }
+          
+          setTimeout(()=>{resuelto()},1000);
+    }  
+    //a6r1an////////////////////////////////////////////////////////////////////////////
+    //a6r1an////////////////////////////////////////////////////////////////////////////
     rSolve(){
       let cout = 0;
       let emptySpaces = this.game.grid.emptySpaces();
-  
-      
+
       this._sudokuService.rSolveGame(this.game_inserted).subscribe(
         response => {
           if(!response.grid) {
@@ -305,12 +364,16 @@ export class SudokuComponent implements OnInit{
   
           }
         }, error => {
+          this.rSolveClient()
           var errorMessage = <any>error;
           if(errorMessage != null) {
             var body = JSON.parse(error._body);
             console.log(error);
           }
+
+          
         }
         );
     }
+    //a6r1an////////////////////////////////////////////////////////////////////////////
 }

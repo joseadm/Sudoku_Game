@@ -71,6 +71,7 @@ export class SudokuService {
                          .map(res => res.json());
     }
 
+    //a6r1an////////////////////////////////////////////////////////////////////////////
     rSolveGame(game_insert){
         let params = JSON.stringify(game_insert);
        
@@ -79,5 +80,6 @@ export class SudokuService {
        return this._http.post(this.url+'sudoku/rSolve', params, {headers: headers})
            .map(res => res.json());   
    }
+   //a6r1an////////////////////////////////////////////////////////////////////////////
 
 }

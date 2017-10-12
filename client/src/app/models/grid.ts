@@ -147,5 +147,37 @@ export class Grid {
           //console.log(obj);
           return obj;
         }
+        gridToMatriz(grid){
+          grid = grid.grid;
+          var arr = []
+          for(let k of grid.data){
+              k.forEach(cell=>{arr.push(cell.value)})
+          }
+          
+          let sudoku = new Array();
+          for(let i = 0; i < 9; i++){
+              sudoku.push(new Array());
+              for(let j = 0; j < 9; j++){
+                  sudoku[i].push(arr.shift());
+              }
+          }
+          return sudoku;
+        }
+        matrizToGrid(sudoku){
+          let grid = new Grid();
+          grid.data = new Array();
+          for(var i=0; i<9; i++) {
+            grid.data[i] = new Array();
+            for(var j=0; j<9; j++) {              
+              var cell = new Cell(sudoku[i][j],i,j);
+              cell.error = false;
+              cell.lightError = false;
+              cell.visible = false;
+              cell.fixed = false;
+              grid.data[i][j] = cell;
+            }
+          }
+          return grid;
+        }
 }
 
