@@ -207,7 +207,6 @@ function insertGame(req, res) {
                             }
                         }
                     });
-
 }
 function getGame(req, res) {
     var userName = req.params.id;

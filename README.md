@@ -30,6 +30,12 @@ $ git clone https://github.com/alonsocoding/Sudoku_Game
 
 ### Compilando el proyecto
 
+0) levantar la base de datos 
+
+```bash
+$ mongod -dbpath "PATH"
+```
+
 1) Ejecutar el siguiente comando dentro de la carpeta api para correr el API Rest:
 
 ```bash
