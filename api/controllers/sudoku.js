@@ -106,6 +106,7 @@ function insertGrid(req, res) {
 }
 
 function getGrid(req, res) {
+    console.log("getGrid");
     var gridId = req.params.id;
     
         Grid.findById(gridId).populate({path: 'grid'}).exec((err, grid) => {
@@ -122,6 +123,7 @@ function getGrid(req, res) {
 }
 
 function getGrids(req, res) {
+    console.log("getGrids");
     if(req.params.page) {
         var page = req.params.page;
     } else {
@@ -170,7 +172,7 @@ function getGridDifficulty(req, res) {
 }
 
 function insertGame(req, res) {
-
+    console.log("insertGame");
 
     var user = new User();
     var grid = new Grid();
@@ -210,6 +212,7 @@ function insertGame(req, res) {
 
 }
 function getGame(req, res) {
+    console.log("getGame");
     var userName = req.params.id;
     
         Game.findOne({'user.name': userName}).populate({path: 'game'}).exec((err, game) => {
@@ -226,6 +229,7 @@ function getGame(req, res) {
 }
 
 function getGames(req, res) {
+        console.log("recuperando games");
         if(req.params.page) {
             var page = req.params.page;
         } else {
@@ -312,18 +316,22 @@ function rsolve_sudoku(req, res){
     console.log("solving sudoku problem");
     console.log(sudoku);
 
-    let sudokuSolver = new SudokuSolver(sudoku);
-    let start = clock();
-    sudokuSolver.solve();//solo encuentra una solucion
-    //sudokuSolver.findSolutions();//encuentra mas de una solucion
-    let duration = clock(start);    
+    setTimeout(()=>{
+        let sudokuSolver = new SudokuSolver(sudoku);
+        let start = clock();
+        sudokuSolver.solve();//solo encuentra una solucion
+        //sudokuSolver.findSolutions();//encuentra mas de una solucion
+        let duration = clock(start);    
 
-    console.log(`solution`);
-    console.log(sudokuSolver.solutions[0]);    
-    console.log(`time of resolution:\n\t ${duration} ms\n\t ${duration/1000} seg\n\t ${(duration/1000)/60} min`);
+        console.log(`solution`);
+        console.log(sudokuSolver.solutions[0]);    
+        console.log(`time of resolution:\n\t ${duration} ms\n\t ${duration/1000} seg\n\t ${(duration/1000)/60} min`);
+    
+        grid = newGrid(sudokuSolver.solutions[0])
+        res.status(200).send({grid});    
 
-    grid = newGrid(sudokuSolver.solutions[0])
-    res.status(200).send({grid});    
+    },0);
+    
 }
 //a6r1an////////////////////////////////////////////////////////////////////////////
 
