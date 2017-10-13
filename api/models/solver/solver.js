@@ -108,16 +108,11 @@ class SudokuSolver {
 	}
 	emptySpaces(){		
 		let obj = {};
+		let k=0;
 		this.initialSudoku.forEach((val,i)=>{
 			this.initialSudoku[i].forEach((val, j)=>{
-				if(this.initialSudoku[i][j]==0){
-					for(;;){
-						let r = nextRandom(0,100)
-						if(!obj[r]){
-							obj[r] = [i,j];
-							break;
-						}
-					}
+				if(this.initialSudoku[i][j]==0){				
+					obj[k++] = [i,j];
 				}
 			});
 		});

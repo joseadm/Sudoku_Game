@@ -54,7 +54,7 @@ let sudoku_hard = [[0,0,0,0,0,0,0,1,0],
 
 
 
-function ArrayOfSudokus(){
+function arrayOfSudokus(){
 	let arr = [];
 	arr.push({sudoku0});
 	arr.push({sudoku1});
@@ -65,5 +65,5 @@ function ArrayOfSudokus(){
 }
 
 module.exports ={
-	ArrayOfSudokus
+	arrayOfSudokus
 }

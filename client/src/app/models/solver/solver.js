@@ -108,20 +108,15 @@ class SudokuSolver {
 	}
 	emptySpaces(){		
 		let obj = {};
+		let k=0;
 		this.initialSudoku.forEach((val,i)=>{
 			this.initialSudoku[i].forEach((val, j)=>{
 				if(this.initialSudoku[i][j]==0){
-					for(;;){
-						let r = nextRandom(0,100)
-						if(!obj[r]){
-							obj[r] = [i,j];
-							break;
-						}
-					}
+					obj[k++] = [i,j];
 				}
 			});
 		});
-		return obj;//[random]=[x,y] //para recorrer los espacios en 0 aleatoriamente
+		return obj;
 	}
 	copy(sudoku){//O(1) y mas DRY
 		return JSON.parse(JSON.stringify(sudoku));
@@ -137,12 +132,12 @@ class SudokuSolver {
 			let range = new Range(contains);
 			for(let n of range){
 				if(this.solutions.length==0){
-					setTimeout(()=>{
+					//setTimeout(()=>{
 						sudoku[x][y] = n;
 						let s = this.copy(sudoku);//de O(81) a //O(1)??
 						//console.log(s);
 						rsolve(s,spaces,i+1);	
-					},0);
+					//},0);
 				}
 			}
 		}

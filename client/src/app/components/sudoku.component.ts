@@ -220,6 +220,7 @@ export class SudokuComponent implements OnInit{
           }
         },
         error => {
+          localStorage.setItem('saved_grid', JSON.stringify(this.grid));
           var alertRegister = <any>error;
           if(alertRegister != null) {
             var body = JSON.parse(error._body);
@@ -242,13 +243,13 @@ export class SudokuComponent implements OnInit{
               this.gridMongo = response.game.grid;
               for (var row = 0; row < 9; row++) {
                 for (var col = 0; col < 9; col++) {
-                  if(this.grid.getCell(row,col).value == 0)
                     this.grid.setCell(this.gridMongo.data[row][col].value,row,col);
                 }
               }
               this.grid.showSpaces();
             }
           }, error => {
+             this.getSavedGrid();
             var errorMessage = <any>error;
             if(errorMessage != null) {
               var body = JSON.parse(error._body);

@@ -17,12 +17,12 @@ class Generator{
   getSudoku(){
     return this.board.sudoku;
   }
-  dispertion(difficulty){
+   dispertion(difficulty){
     var emptySpaces = 0;
     switch(difficulty){
-      case 'easy':emptySpaces = 42; break;
-      case 'medium':emptySpaces = 47; break;
-      case 'hard':emptySpaces = 52; break;
+      case 'easy':emptySpaces = 40; break;
+      case 'medium':emptySpaces = 50; break;
+      case 'hard':emptySpaces = 60; break;
       default: return this.dispertion('medium');
     }
     return this.board.dispertion(emptySpaces);
