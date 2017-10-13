@@ -170,6 +170,7 @@ export class SudokuComponent implements OnInit{
           for (var col = 0; col < 9; col++) {
             this.grid.setCell(this.saved_grid.data[row][col].value,row,col);
             this.grid.getCell(row, col).fixed = this.saved_grid.data[row][col].fixed;
+            this.game_inserted.grid = this.saved_grid;
           }
         }
         this.grid.createSpaces();
@@ -269,6 +270,7 @@ export class SudokuComponent implements OnInit{
       for (var row = 0; row < 9; row++) {
         for (var col = 0; col < 9; col++) {
             this.grid.setCell(this.gridMongo.data[row][col].value,row,col);
+            this.game_inserted.grid = this.grid;
         }
       }
       this.grid.createSpaces();
