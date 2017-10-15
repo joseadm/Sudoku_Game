@@ -292,6 +292,7 @@ export class SudokuComponent implements OnInit{
                 }
               }
               this.grid.createSpaces();
+              this.game_inserted.grid = this.grid;
             }
           }, error => {
             //a6r1an////////////////////////////////////////////////////////////////////////////
@@ -348,8 +349,9 @@ export class SudokuComponent implements OnInit{
     rSolve(){
       let cout = 0;
       let emptySpaces = this.game.grid.emptySpaces();
-
+        console.log(this.game_inserted)
       this._sudokuService.rSolveGame(this.game_inserted).subscribe(
+
         response => {
           if(!response.grid) {
             this._router.navigate(['/']);
