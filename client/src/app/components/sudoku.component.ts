@@ -1,5 +1,6 @@
 import { Component, OnInit, OnDestroy, HostListener} from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
+import {Observable} from 'rxjs/Observable';
 
 import { UserService } from '../services/user.service';
 import { SudokuService } from '../services/sudoku.service';
@@ -37,6 +38,8 @@ export class SudokuComponent implements OnInit{
     public range;
     public saved_grid;
     public unloadMessage;
+    public date;
+
 
     constructor(
         private _route: ActivatedRoute,
@@ -54,6 +57,9 @@ export class SudokuComponent implements OnInit{
         this.gameMongo = new Game(new User('','','',''), new Grid());
         this.titulo = 'Jugar Sudoku';
         this.range = Array.from({length : 9}, (_, i) => i);
+        setInterval(() => {
+          this.date = new Date();
+        }, 1);
     }
   
     @HostListener('window:beforeunload', [ '$event' ])
@@ -150,8 +156,8 @@ export class SudokuComponent implements OnInit{
                       } else if (p.keyCode === 96 || p.keyCode === 48 || p.keyCode === p.BACKSPACE || p.keyCode === p.DELETE) {
                         this.game.setCellValue(this.game.selectedCell, 0);
                       } else if (p.keyCode >= 49 && p.keyCode <= 57) {
-                        this.game.setCellValue(this.game.selectedCell, p.keyCode - 48);
-                      } else if (p.keyCode >= 97 && p.keyCode <= 105) {
+                          this.game.setCellValue(this.game.selectedCell, p.keyCode - 48);
+                        } else if (p.keyCode >= 97 && p.keyCode <= 105) {
                         this.game.setCellValue(this.game.selectedCell, p.keyCode - 96);
                       }
                   }
@@ -175,6 +181,10 @@ export class SudokuComponent implements OnInit{
         }
         this.grid.createSpaces();
       }
+    }
+    
+    buttonPressed(number: number) {
+      this.game.setCellValue(this.game.selectedCell, number);
     }
 
     getGrid() {
@@ -260,7 +270,6 @@ export class SudokuComponent implements OnInit{
         );
       });
     }
-    //a6r1an////////////////////////////////////////////////////////////////////////////
     createGridDifficultyClient(difficulty){
       let generator = new Generator();
       generator.newSudoku();
@@ -275,7 +284,6 @@ export class SudokuComponent implements OnInit{
       }
       this.grid.createSpaces();
     }
-    //a6r1an////////////////////////////////////////////////////////////////////////////
     getGridDifficulty(difficulty: string) {
       this._route.params.forEach((params: Params) => {
         this._sudokuService.getGridDifficulty(this.token, difficulty).subscribe(
@@ -295,9 +303,7 @@ export class SudokuComponent implements OnInit{
               this.game_inserted.grid = this.grid;
             }
           }, error => {
-            //a6r1an////////////////////////////////////////////////////////////////////////////
             this.createGridDifficultyClient(difficulty);
-            //a6r1an////////////////////////////////////////////////////////////////////////////
             var errorMessage = <any>error;
             if(errorMessage != null) {
               var body = JSON.parse(error._body);
@@ -307,7 +313,6 @@ export class SudokuComponent implements OnInit{
         );
       });
     }
-    //a6r1an////////////////////////////////////////////////////////////////////////////
     rSolveClient(){
       let cout = 0;
       let emptySpaces = this.game.grid.emptySpaces();
@@ -344,8 +349,6 @@ export class SudokuComponent implements OnInit{
           
           setTimeout(()=>{resuelto()},1000);
     }  
-    //a6r1an////////////////////////////////////////////////////////////////////////////
-    //a6r1an////////////////////////////////////////////////////////////////////////////
     rSolve(){
       let cout = 0;
       let emptySpaces = this.game.grid.emptySpaces();
@@ -380,5 +383,4 @@ export class SudokuComponent implements OnInit{
         }
         );
     }
-    //a6r1an////////////////////////////////////////////////////////////////////////////
 }
