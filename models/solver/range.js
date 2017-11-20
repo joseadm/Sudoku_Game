@@ -1,5 +1,6 @@
 /*
 	author: Adrian Prendas Araya
+	email: a6r2an@gmail.com
 */
 class Range{
 	constructor(arr){
@@ -13,9 +14,6 @@ class Range{
 			return {done: false, value: this.posibles[this.index++]}
 		this.index = 0;
 		return { value: undefined, done: true }
-	}
-	nextRandom(min, max){//floor, sin decimales//(max-min)+min
-		return Math.floor(Math.random() * ((max+1) - min)) + min;
 	}
 	[Symbol.iterator](){
     	return this;

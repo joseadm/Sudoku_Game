@@ -6,14 +6,25 @@ export class Game {
     grid: Grid;
     selectedCell: any;
     range: Array<any>;
+    error;
     
     constructor(user: User, grid: Grid) {
         this.user = user;
         this.grid = grid;
         this.range = Array.from({length : 9}, (_, i) => i);
+        this.error;
     }
     checkGrid() {
         return this.grid.check();
+    }
+    isValid() {
+      this.range.forEach((i)=> {
+        if (!this.grid.isValid(this.grid.rows[i])) {
+          this.error = "Error el numero se repite en la fila"
+          return false;
+        }
+      });
+      return true;
     }
     setCellValue(cell, value) {
         if (!cell.fixed && value >= 0 && value <= 10) {

@@ -10,10 +10,10 @@ body {
     padding-top: 3.5rem;
     background: #2196F3;
   }
-
-.content {
-  background: #eee;
-}
+  .hora {
+    color: white;
+    text-align: left;
+  }
   /*
    * Typography
    */

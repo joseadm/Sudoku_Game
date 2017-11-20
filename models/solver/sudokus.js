@@ -1,3 +1,7 @@
+/*
+	author: Adrian Prendas Araya
+	email: a6r2an@gmail.com
+*/
 let sudoku0 = [[0,0,0,2,6,0,7,0,1],
 			   [6,8,0,0,7,0,0,9,0],
 			   [1,9,0,8,3,4,5,6,0],
@@ -50,7 +54,7 @@ let sudoku_hard = [[0,0,0,0,0,0,0,1,0],
 
 
 
-function ArrayOfSudokus(){
+function arrayOfSudokus(){
 	let arr = [];
 	arr.push({sudoku0});
 	arr.push({sudoku1});
@@ -61,5 +65,5 @@ function ArrayOfSudokus(){
 }
 
 module.exports ={
-	ArrayOfSudokus
+	arrayOfSudokus
 }

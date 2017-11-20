@@ -1,4 +1,8 @@
+/*
+  erick?? o interne!???
+*/
 const {Range} = require('./range');
+let {nextRandom} = require('./test_sudoku');
 
 class Generator{
   constructor(){
@@ -16,9 +20,9 @@ class Generator{
   dispertion(difficulty){
     var emptySpaces = 0;
     switch(difficulty){
-      case 'easy':emptySpaces = 42; break;
-      case 'medium':emptySpaces = 47; break;
-      case 'hard':emptySpaces = 52; break;
+      case 'easy':emptySpaces = 40; break;
+      case 'medium':emptySpaces = 50; break;
+      case 'hard':emptySpaces = 60; break;
       default: return this.dispertion('medium');
     }
     return this.board.dispertion(emptySpaces);
@@ -137,10 +141,9 @@ class Board{
   }
   dispertion(emptySpaces){
     let sudoku = this.copy(this.sudoku);
-    let rand = new Range([]);
     for(;emptySpaces!=0;){
-        let x = rand.nextRandom(0,8);
-        let y = rand.nextRandom(0,8);
+        let x = nextRandom(0,8)
+        let y = nextRandom(0,8)
         if(sudoku[x][y]!=0){
           sudoku[x][y]=0;
           emptySpaces--;
@@ -149,6 +152,7 @@ class Board{
     return sudoku;
   }
 }
+
 
 class Grid{
   constructor(){
@@ -168,10 +172,6 @@ function swap(array, i, j) {
 
   return(array);
 }
-
-//var Generator = new Generator;
-//Generator.newSudoku();
-//Generator.getSudoku();
 
 module.exports ={
   Generator

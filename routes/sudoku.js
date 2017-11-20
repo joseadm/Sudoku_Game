@@ -17,7 +17,7 @@ api.get('/sudoku/get-game/:id', SudokuController.getGame);
 api.get('/sudoku/get-games:page?', SudokuController.getGames);
 api.delete('/sudoku/deleteAll', SudokuController.deleteAllGames);
 api.delete('/sudoku/deleteAllGrids', SudokuController.deleteAllGrids);
-
+//a6r1an////////////////////////////////////////////////////////////////////////////
 api.post('/sudoku/rsolve', SudokuController.rsolve_sudoku);
-
+//a6r1an////////////////////////////////////////////////////////////////////////////
 module.exports = api;

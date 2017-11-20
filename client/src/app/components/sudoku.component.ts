@@ -1,5 +1,6 @@
 import { Component, OnInit, OnDestroy, HostListener} from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
+import {Observable} from 'rxjs/Observable';
 
 import { UserService } from '../services/user.service';
 import { SudokuService } from '../services/sudoku.service';
@@ -11,6 +12,10 @@ import { Grid } from '../models/grid';
 import { Game } from '../models/game';
 
 import * as p5 from 'p5';
+
+import { SudokuSolver } from '../models/solver/solver';
+import { Generator } from '../models/solver/generator';
+//import { SudokuSolver } from '../models/solver/solver';
 
 @Component({
     selector: 'sudoku',
@@ -33,6 +38,8 @@ export class SudokuComponent implements OnInit{
     public range;
     public saved_grid;
     public unloadMessage;
+    public date;
+
 
     constructor(
         private _route: ActivatedRoute,
@@ -50,6 +57,9 @@ export class SudokuComponent implements OnInit{
         this.gameMongo = new Game(new User('','','',''), new Grid());
         this.titulo = 'Jugar Sudoku';
         this.range = Array.from({length : 9}, (_, i) => i);
+        setInterval(() => {
+          this.date = new Date();
+        }, 1);
     }
   
     @HostListener('window:beforeunload', [ '$event' ])
@@ -146,8 +156,8 @@ export class SudokuComponent implements OnInit{
                       } else if (p.keyCode === 96 || p.keyCode === 48 || p.keyCode === p.BACKSPACE || p.keyCode === p.DELETE) {
                         this.game.setCellValue(this.game.selectedCell, 0);
                       } else if (p.keyCode >= 49 && p.keyCode <= 57) {
-                        this.game.setCellValue(this.game.selectedCell, p.keyCode - 48);
-                      } else if (p.keyCode >= 97 && p.keyCode <= 105) {
+                          this.game.setCellValue(this.game.selectedCell, p.keyCode - 48);
+                        } else if (p.keyCode >= 97 && p.keyCode <= 105) {
                         this.game.setCellValue(this.game.selectedCell, p.keyCode - 96);
                       }
                   }
@@ -166,10 +176,15 @@ export class SudokuComponent implements OnInit{
           for (var col = 0; col < 9; col++) {
             this.grid.setCell(this.saved_grid.data[row][col].value,row,col);
             this.grid.getCell(row, col).fixed = this.saved_grid.data[row][col].fixed;
+            this.game_inserted.grid = this.saved_grid;
           }
         }
         this.grid.createSpaces();
       }
+    }
+    
+    buttonPressed(number: number) {
+      this.game.setCellValue(this.game.selectedCell, number);
     }
 
     getGrid() {
@@ -216,6 +231,7 @@ export class SudokuComponent implements OnInit{
           }
         },
         error => {
+          localStorage.setItem('saved_grid', JSON.stringify(this.grid));
           var alertRegister = <any>error;
           if(alertRegister != null) {
             var body = JSON.parse(error._body);
@@ -238,13 +254,13 @@ export class SudokuComponent implements OnInit{
               this.gridMongo = response.game.grid;
               for (var row = 0; row < 9; row++) {
                 for (var col = 0; col < 9; col++) {
-                  if(this.grid.getCell(row,col).value == 0)
                     this.grid.setCell(this.gridMongo.data[row][col].value,row,col);
                 }
               }
               this.grid.showSpaces();
             }
           }, error => {
+             this.getSavedGrid();
             var errorMessage = <any>error;
             if(errorMessage != null) {
               var body = JSON.parse(error._body);
@@ -254,7 +270,20 @@ export class SudokuComponent implements OnInit{
         );
       });
     }
-
+    createGridDifficultyClient(difficulty){
+      let generator = new Generator();
+      generator.newSudoku();
+      let sudoku = generator.dispertion(difficulty);
+      let grid = this.grid.matrizToGrid(sudoku);
+      this.gridMongo = grid;
+      for (var row = 0; row < 9; row++) {
+        for (var col = 0; col < 9; col++) {
+            this.grid.setCell(this.gridMongo.data[row][col].value,row,col);
+            this.game_inserted.grid = this.grid;
+        }
+      }
+      this.grid.createSpaces();
+    }
     getGridDifficulty(difficulty: string) {
       this._route.params.forEach((params: Params) => {
         this._sudokuService.getGridDifficulty(this.token, difficulty).subscribe(
@@ -263,6 +292,7 @@ export class SudokuComponent implements OnInit{
                 this._router.navigate(['/']);
             } else {
               console.log(response.grid);
+
               this.gridMongo = response.grid;
               for (var row = 0; row < 9; row++) {
                 for (var col = 0; col < 9; col++) {
@@ -270,8 +300,10 @@ export class SudokuComponent implements OnInit{
                 }
               }
               this.grid.createSpaces();
+              this.game_inserted.grid = this.grid;
             }
           }, error => {
+            this.createGridDifficultyClient(difficulty);
             var errorMessage = <any>error;
             if(errorMessage != null) {
               var body = JSON.parse(error._body);
@@ -281,13 +313,48 @@ export class SudokuComponent implements OnInit{
         );
       });
     }
+    rSolveClient(){
+      let cout = 0;
+      let emptySpaces = this.game.grid.emptySpaces();
 
+      let sudoku = this.grid.gridToMatriz(this.game_inserted);
+
+          console.log("solving sudoku problem");
+          console.log(sudoku);
+          let sudokuSolver = new SudokuSolver(sudoku);
+
+          let start = performance.now();
+          sudokuSolver.solve();//solo encuentra una solucion
+
+          let resuelto=()=>{
+              if(sudokuSolver.solutions.length!=0){
+                //sudokuSolver.findSolutions();//encuentra mas de una solucion
+                let end = performance.now();
+                let duration = end - start;
+                console.log(`solution`);
+                console.log(sudokuSolver.solutions[0]);    
+                console.log(`time of resolution:\n\t ${duration} ms\n\t ${duration/1000} seg\n\t ${(duration/1000)/60} min`);
+                let grid = this.grid.matrizToGrid(sudokuSolver.solutions[0])
+                for(let p in emptySpaces){
+                  setTimeout(()=>{
+                    let [x,y] = emptySpaces[p];
+                    this.game.setSelectedCell(this.game.grid.getCell(x,y));
+                    this.game.setCellValue(this.game.selectedCell, grid.data[x][y].value);
+                  },100*cout++);
+                }
+
+              }else
+                setTimeout(()=>{resuelto()},1000);
+          }
+          
+          setTimeout(()=>{resuelto()},1000);
+    }  
     rSolve(){
       let cout = 0;
       let emptySpaces = this.game.grid.emptySpaces();
-  
-      
+        console.log(this.game_inserted)
       this._sudokuService.rSolveGame(this.game_inserted).subscribe(
+
         response => {
           if(!response.grid) {
             this._router.navigate(['/']);
@@ -305,11 +372,14 @@ export class SudokuComponent implements OnInit{
   
           }
         }, error => {
+          this.rSolveClient()
           var errorMessage = <any>error;
           if(errorMessage != null) {
             var body = JSON.parse(error._body);
             console.log(error);
           }
+
+          
         }
         );
     }

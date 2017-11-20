@@ -1,63 +1,81 @@
+<script src="../models/solver/generator.js" type="text/javascript"></script> 
+<script src="../models/solver/solver.js" type="text/javascript"></script> 
+<script src="../models/solver/range.js" type="text/javascript"></script> 
+<script src="../models/solver/test_sudoku.js" type="text/javascript"></script>
+
 <h3>
   {{titulo}}</h3>
-<div class="container wrapper">
-  <div class="row">
-    <div *ngIf="alertRegister" class="alert alert-info">
-      {{alertRegister}}
-    </div>
-    <div class="col-12" align="center">
-      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
-        Nuevo
-      </button>
+  <div class="container wrapper">
+    <div class="row">
+      <div *ngIf="alertRegister" class="alert alert-info">
+        {{alertRegister}}
+      </div>
+      <div class="col-12 hora" align="left"><h4>Hora: {{ date | date:'hh:mm:ss'}}</h4></div>
+      <div class="col-12" align="center">
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
+          Nuevo
+        </button>
 
-      <!-- Modal -->
-      <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="exampleModalLabel">Elige la dificultad</h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div class="modal-body">
-              <div class="row">
-                <div class="col-4">
-                  <p>Esta dificultad permite aprender a los jugadores sin nada de experiencia</p>
-                  <a href="#" class="btn btn-success"
+        <!-- Modal -->
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Elige la dificultad</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <div class="row">
+                  <div class="col-4">
+                    <p>Esta dificultad permite aprender a los jugadores sin nada de experiencia</p>
+                    <br>
+                    <a href="#" class="btn btn-success"
                     (click)="getGridDifficulty('easy')" data-dismiss="modal">Facil</a>
-                </div>
-                <div class="col-4">
-                  <p>Permite a los jugadores con habilidad aprender a analizar</p>
-                  <a href="#" class="btn btn-warning" (click)="getGridDifficulty('medium')"
+                  </div>
+                  <div class="col-4">
+                    <p>Permite a los jugadores con habilidad aprender a analizar</p>
+                    <br>
+                    <a href="#" class="btn btn-warning" (click)="getGridDifficulty('medium')"
                     data-dismiss="modal">Medio</a>
-                </div>
-                <div class="col-4">
-                  <p>Una modalidad mas dificil para los jugadores mas expertos y habilidosos</p>
-                  <a href="#" class="btn btn-danger"
+                  </div>
+                  <div class="col-4">
+                    <p>Una modalidad mas dificil para los jugadores mas expertos y habilidosos</p>
+                    <br>
+                    <a href="#" class="btn btn-danger"
                     (click)="getGridDifficulty('hard')" data-dismiss="modal">Dificil</a>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+              </div>
             </div>
           </div>
         </div>
+
+        <button type="button" class="btn btn-success" (click)="insertGame()">Guardar</button>
+        <button type="button" class="btn btn-warning" (click)="getGame()">Cargar</button>
+        <button type="button" class="btn btn-danger" (click)="rSolve()">Resolver</button>
       </div>
-
-      <button type="button" class="btn btn-success" (click)="insertGame()">Guardar</button>
-      <button type="button" class="btn btn-warning" (click)="getGame()">Cargar</button>
-      <button type="button" class="btn btn-danger" (click)="rSolve()">Resolver</button>
+      <div class="col-12" align="center">
+        <br>
+        <div id="sudokuGrid"></div>
+        <br>
+      </div>
+      <div class="col-12" align="center">
+        <button type="button" class="btn btn-dark" (click)="buttonPressed(1)">1</button>
+        <button type="button" class="btn btn-dark" (click)="buttonPressed(2)">2</button>
+        <button type="button" class="btn btn-dark" (click)="buttonPressed(3)">3</button>
+        <button type="button" class="btn btn-dark" (click)="buttonPressed(4)">4</button>
+        <button type="button" class="btn btn-dark" (click)="buttonPressed(5)">5</button>
+        <button type="button" class="btn btn-dark" (click)="buttonPressed(6)">6</button>
+        <button type="button" class="btn btn-dark" (click)="buttonPressed(7)">7</button>
+        <button type="button" class="btn btn-dark" (click)="buttonPressed(8)">8</button>
+        <button type="button" class="btn btn-dark" (click)="buttonPressed(9)">9</button>
+      </div>
+      <br>
+      <br>
     </div>
-    <div class="col-12" align="center">
-      <br>
-      <div id="sudokuGrid"></div>
-      <br>
-      <br>
-
-    </div>
-    <br>
-    <br>
   </div>
-</div>
