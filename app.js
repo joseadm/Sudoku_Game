@@ -2,7 +2,7 @@
 
 var express = require('express');
 var bodyParser = require('body-parser');
-var path = require('path'); // ESTA VARA
+var path = require('path');
 
 var app = express();
 
@@ -12,7 +12,7 @@ var user_routes = require('./routes/user');
 var sudoku_routes = require('./routes/sudoku');
 
 // Set Static Folder
-app.use(express.static(path.join(__dirname, 'public'))); // ESTA VARA
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(bodyParser.urlencoded({extended:false}));
 app.use(bodyParser.json());
